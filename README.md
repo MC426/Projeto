@@ -1,3 +1,3 @@
 Projeto de MC426 - UNICAMP, 2 semestre de 2023
 
-Nesse projeto iremos [...]
+Nesse projeto iremos abordar um problema sobre Saúde Pública.
