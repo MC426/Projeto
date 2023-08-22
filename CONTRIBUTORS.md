@@ -1,5 +1,5 @@
 1. Andreas Cisi Ramos (RA246932)
-2. Andreas Cisi Ramos (RA246932)
+2. Bruno Amaral Teixeira de Freitas (RA246983)
 3. Andreas Cisi Ramos (RA246932)
 4. Andreas Cisi Ramos (RA246932)
 5. Andreas Cisi Ramos (RA246932)
