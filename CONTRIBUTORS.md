@@ -1,5 +1,5 @@
 1. Andreas Cisi Ramos (RA246932)
 2. Bernardo Panka Archegas (RA246970)
 3. Bruno Amaral Teixeira de Freitas (RA246983)
-4. Andreas Cisi Ramos (RA246932)
-5. Andreas Cisi Ramos (RA246932)
+4. Naim Shaikhzadeh Santos (RA242275)
+5. Luiz Henrique Yuji Oda (RA247255)
