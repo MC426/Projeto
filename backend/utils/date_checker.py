@@ -37,7 +37,7 @@ class DateChecker():
         years = [now.year, now.year + 1]
         forbidden_dates = holidays.Brazil(years=years)
         for holiday in forbidden_dates.keys():
-            if date == holiday:
+            if date.date() == holiday:
                 return False
 
         return True
