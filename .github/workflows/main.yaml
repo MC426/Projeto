@@ -1,0 +1,30 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feat/CI
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11.5
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install backend/
+
+      - name: Run tests
+        run: |
+          python -m unittest discover -s backend/tests/
