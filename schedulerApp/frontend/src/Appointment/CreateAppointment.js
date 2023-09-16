@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from "axios";
 
 function CreateAppointment() {
   const [formData, setFormData] = useState({
@@ -13,20 +14,19 @@ function CreateAppointment() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+    // axios.defaults.xsrfCookieName = 'csrftoken';
 
-    // Send a POST request to your backend API to create a new appointment
-    // Replace this with your actual API endpoint and request configuration
-    fetch('/api/appointments/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    axios
+      .post('/api/appointments/', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
         // Handle success or display a success message
-        console.log('Appointment created:', data);
+        console.log('Appointment created:', response.data);
 
         // Reset the form data
         setFormData({
@@ -53,12 +53,52 @@ function CreateAppointment() {
       <form onSubmit={handleSubmit}>
         {/* Add form fields for each appointment property */}
         <div>
-          <label htmlFor="hospital_or_clinic_name">Hospital/Clinic Name:</label>
+        <label htmlFor="start_time">Start Time:</label>
+          <input
+            type="datetime-local"
+            id="start_time"
+            name="start_time"
+            value={formData.start_time}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="end_time">End Time:</label>
+          <input
+            type="datetime-local"
+            id="end_time"
+            name="end_time"
+            value={formData.end_time}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="max_capacity">Max Capacity:</label>
+          <input
+            type="number"
+            id="max_capacity"
+            name="max_capacity"
+            value={formData.max_capacity}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="location">Location:</label>
           <input
             type="text"
-            id="hospital_or_clinic_name"
-            name="hospital_or_clinic_name"
-            value={formData.hospital_or_clinic_name}
+            id="location"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="medic_name">Medic Name:</label>
+          <input
+            type="text"
+            id="medic_name"
+            name="medic_name"
+            value={formData.medic_name}
             onChange={handleChange}
           />
         </div>

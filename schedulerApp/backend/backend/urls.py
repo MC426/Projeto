@@ -18,11 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from scheduler import views
 from rest_framework import routers
-from scheduler import views
 
 router = routers.DefaultRouter()
 router.register(r'appointments', views.AppointmentView)
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/appointments/', views.create_appointment, name='create_appointment')
 ]
