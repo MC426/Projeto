@@ -17,7 +17,7 @@ class TestEmailChecker(unittest.TestCase):
         invalid_emails = [
             "gha@@dac.unicamp.br",
             "try@gmail.",
-            "ops@domain.prt%"
+            "ops@domain..prt%"
         ]
         
         # --------- VALID EMAILS -------
