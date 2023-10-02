@@ -1,61 +1,61 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addLead } from '../../actions/leads';
+import { addReceitas } from '../../actions/receitas';
 
 export class Form extends Component {
   state = {
-    name: '',
-    email: '',
+    nomeMedico: '',
+    remedios: '',
     message: '',
   };
 
   static propTypes = {
-    addLead: PropTypes.func.isRequired,
+    addReceitas: PropTypes.func.isRequired,
   };
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChange = (e) => this.setState({ [e.target.nomeMedico]: e.target.value });
 
   onSubmit = (e) => {
     e.preventDefault();
-    const { name, email, message } = this.state;
-    const lead = { name, email, message };
-    this.props.addLead(lead);
+    const { nomeMedico, remedios, message } = this.state;
+    const receitas = { nomeMedico, remedios, message };
+    this.props.addReceitas(receitas);
     this.setState({
-      name: '',
-      email: '',
+      nomeMedico: '',
+      remedios: '',
       message: '',
     });
   };
 
   render() {
-    const { name, email, message } = this.state;
+    const { nomeMedico, remedios, message } = this.state;
     return (
       <div className="card card-body mt-4 mb-4">
-        <h2>Add Lead</h2>
+        <h2>Adicionar Receitas</h2>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
-            <label>Name</label>
+            <label>Nome Medico</label>
             <input
               className="form-control"
               type="text"
-              name="name"
+              name="nomeMedico"
               onChange={this.onChange}
-              value={name}
+              value={nomeMedico}
             />
           </div>
           <div className="form-group">
-            <label>Email</label>
+            <label>Remedios</label>
             <input
               className="form-control"
-              type="email"
-              name="email"
+              type="text"
+              name="remedios"
               onChange={this.onChange}
-              value={email}
+              value={remedios}
             />
           </div>
           <div className="form-group">
-            <label>Message</label>
+            <label>Observacoes</label>
             <textarea
               className="form-control"
               type="text"
@@ -66,7 +66,7 @@ export class Form extends Component {
           </div>
           <div className="form-group">
             <button type="submit" className="btn btn-primary">
-              Submit
+              Enviar
             </button>
           </div>
         </form>
@@ -75,4 +75,4 @@ export class Form extends Component {
   }
 }
 
-export default connect(null, { addLead })(Form);
+export default connect(null, { addReceitas })(Form);

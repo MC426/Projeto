@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react';
 import Form from './Form';
-import Leads from './Leads';
+import Receitas from './Receitas';
 
-export default function Dashboard() {
+const Dashboard = () => {
   return (
     <Fragment>
       <Form />
-      <Leads />
+      <Receitas />
     </Fragment>
   );
 }
+
+export default Dashboard;

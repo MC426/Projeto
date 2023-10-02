@@ -22,7 +22,7 @@ export const deleteReceitas = (id) => (dispatch, getState) => {
   axios
     .delete(`/api/receitas/${id}/`, tokenConfig(getState))
     .then((res) => {
-      dispatch(createMessage({ deleteReceitas: 'Lead Deleted' }));
+      dispatch(createMessage({ deleteReceitas: 'Receitas Deleted' }));
       dispatch({
         type: DELETE_RECEITAS,
         payload: id,
@@ -31,14 +31,14 @@ export const deleteReceitas = (id) => (dispatch, getState) => {
     .catch((err) => console.log(err));
 };
 
-// ADD LEAD
-export const addLead = (lead) => (dispatch, getState) => {
+// ADD RECEITAS
+export const addReceitas = (receitas) => (dispatch, getState) => {
   axios
-    .post('/api/leads/', lead, tokenConfig(getState))
+    .post('/api/receitas/', receitas, tokenConfig(getState))
     .then((res) => {
-      dispatch(createMessage({ addLead: 'Lead Added' }));
+      dispatch(createMessage({ addReceitas: 'Receita Adicionada' }));
       dispatch({
-        type: ADD_LEAD,
+        type: ADD_RECEITAS,
         payload: res.data,
       });
     })
