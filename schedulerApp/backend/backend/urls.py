@@ -25,5 +25,6 @@ router.register(r'appointments', views.AppointmentView)
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/', include('user_api.urls')),
+    path('', include('receitas.urls')),
     path('api/appointments/', views.create_appointment, name='create_appointment')
 ]

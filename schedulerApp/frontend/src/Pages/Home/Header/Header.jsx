@@ -36,7 +36,7 @@ const Header = () => {
                             <Link to="/service" className='list-item text-decoration-none'>Serviços</Link>
                             <Link to="/hospital" className='list-item text-decoration-none'>Hospitais</Link>
                             <Link to="/contact" className='list-item text-decoration-none'>Contato</Link>
-                            {user.email 
+                            {/* {user.email 
                             ?
                             <button type="button" className="btn btn-danger" onClick={logout}>Log Out</button>
                             :
@@ -44,7 +44,7 @@ const Header = () => {
                             }
                             {user.email &&
                                 <Navbar.Text><FontAwesomeIcon icon={faUser} /><span className="userName">{user.displayName}</span></Navbar.Text>
-                            }
+                            } */}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
