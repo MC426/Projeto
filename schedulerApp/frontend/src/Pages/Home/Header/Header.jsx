@@ -5,23 +5,43 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import logo from '../../../Images/logo ic.png';
 import './Header.css';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.withCredentials = true;
+
+const client = axios.create({
+  baseURL: "http://127.0.0.1:8000"
+});
 
 const Header = () => {
+    const [userData, setUserData] = useState(null);
 
-    // const [currentUser, setCurrentUser] = useState();
-    // const [email, setEmail] = useState('');
-
-    // useEffect(() => {
-    //     client.get("/api/user")
-    //     .then(function(res) {
-    //     setCurrentUser(true);
-    //     })
-    //     .catch(function(error) {
-    //     setCurrentUser(false);
-    //     });
-    // }, []);
-    const client = "cliente";
-    const user = "usuario";
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch('/api/user');
+          const data = await response.json();
+          setUserData(data);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+  
+      fetchUserData();
+    }, [, submitLogout]);
+    function submitLogout(e) {
+        e.preventDefault();
+        client.post(
+        "/api/logout",
+        {withCredentials: true}
+        ).then(function(res) {
+            setUserData(null);
+        });
+    }
 
     return (
         <div className="head-bg">
@@ -36,14 +56,16 @@ const Header = () => {
                             <Link to="/service" className='list-item text-decoration-none'>Serviços</Link>
                             <Link to="/hospital" className='list-item text-decoration-none'>Hospitais</Link>
                             <Link to="/contact" className='list-item text-decoration-none'>Contato</Link>
-                            {user.email 
+                            {
+                            userData 
                             ?
-                            <button type="button" className="btn btn-danger" onClick={logout}>Log Out</button>
+                            <Link to="/profile" type="button" className="btn btn-danger">Profile</Link>
+                            // <button type="button" className="btn btn-danger" onClick={submitLogout}>Log Out</button>
                             :
                             <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }
-                            {user.email &&
-                                <Navbar.Text><FontAwesomeIcon icon={faUser} /><span className="userName">{user.displayName}</span></Navbar.Text>
+                            {userData &&
+                                <Navbar.Text><FontAwesomeIcon icon={faUser} /><span className="userName">{userData.email}</span></Navbar.Text>
                             }
                         </Nav>
                     </Navbar.Collapse>

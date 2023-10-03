@@ -4,6 +4,7 @@ import Home from './Pages/Home/Home/Home'
 import Login from './Pages/Login/Login'
 import Header from './Pages/Home/Header/Header.jsx'
 import Footer from './Pages/Home/Fotter/Footer';
+import Dashboard from './Pages/Profile/Dashboard/Dashboard'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element = {<Home />} />
         <Route path="/home" element = {<Home />} />
         <Route path="/login" element = {<Login />} />
+        <Route path="/profile" element = {<Dashboard />} />
       </Routes>
       <Footer/>
     </Router>
