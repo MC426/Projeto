@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -28,13 +29,21 @@ const Dashboard = () => {
       
         fetchUserData();
       }, []);
-
     
+  function submitLogout(e) {
+        e.preventDefault();
+        client.post(
+        "/api/logout",
+        {withCredentials: true}
+        ).then(function(res) {
+            setUserData(null);
+        });
+    }
 
   return (
-
-    userData ?
-
+    <div>
+          {userData ?
+    (<>
     <div className="container mt-5">
       <div className="row">
         {/* Profile Information */}
@@ -46,7 +55,7 @@ const Dashboard = () => {
               alt="Profile Image"
             />
             <div className="card-body">
-              <h5 className="card-title"> {userData.username} </h5>
+              <h5 className="card-title"> {userData.name} </h5>
               <p className="card-text"> {userData.email} </p>
             </div>
           </div>
@@ -66,12 +75,13 @@ const Dashboard = () => {
           {/* Sample Action Buttons */}
           <div className="mt-3">
             <button className="btn btn-primary">Editar Perfil</button>
-            <button className="btn btn-danger">Logout</button>
+            <Link to="/home" type="button" className="btn btn-danger" onClick={submitLogout}>Logout</Link>
           </div>
         </div>
       </div>
+    </div></>)
+    : (<div> Please login first </div>)}
     </div>
-    : <div> Please login first </div>
   );
 };
 
