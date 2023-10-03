@@ -13,35 +13,9 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://127.0.0.1:8000"
-});
+
 
 const Header = () => {
-    const [userData, setUserData] = useState(null);
-
-    useEffect(() => {
-      const fetchUserData = async () => {
-        try {
-          const response = await fetch('/api/user');
-          const data = await response.json();
-          setUserData(data);
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      };
-  
-      fetchUserData();
-    }, [, submitLogout]);
-    function submitLogout(e) {
-        e.preventDefault();
-        client.post(
-        "/api/logout",
-        {withCredentials: true}
-        ).then(function(res) {
-            setUserData(null);
-        });
-    }
 
     return (
         <div className="head-bg">
@@ -57,16 +31,16 @@ const Header = () => {
                             <Link to="/hospital" className='list-item text-decoration-none'>Hospitais</Link>
                             <Link to="/contact" className='list-item text-decoration-none'>Contato</Link>
                             {
-                            userData 
-                            ?
+                            // userData 
+                            // ?
                             <Link to="/profile" type="button" className="btn btn-danger">Profile</Link>
                             // <button type="button" className="btn btn-danger" onClick={submitLogout}>Log Out</button>
-                            :
-                            <Link to="/login" type="button" className="btn btn-danger">Login</Link>
+                            // :
+                            // <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }
-                            {userData &&
+                            {/* {userData &&
                                 <Navbar.Text><FontAwesomeIcon icon={faUser} /><span className="userName">{userData.email}</span></Navbar.Text>
-                            }
+                            } */}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
