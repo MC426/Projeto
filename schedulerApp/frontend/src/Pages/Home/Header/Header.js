@@ -7,6 +7,7 @@ import logo from '../../../Images/logo ic.png';
 import './Header.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom'; // Import useLocation from react-router-dom
 
 
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -21,14 +22,12 @@ const Header = () => {
 
     const [userData, setUserData] = useState(null);
     const [userState, setUserState] = useState(false);
+    const location = useLocation();
 
-    useEffect(() => {
+    const fetchUserData = () => {
       const cookies = document.cookie;
-
-      console.log(cookies, cookies.jwt);
-
-      client.get("/api/user", 
-      {
+  
+      client.get("/api/user", {
         withCredentials: true
       })
         .then(function (res) {
@@ -44,7 +43,11 @@ const Header = () => {
           setUserData(null);
           setUserState(false);
         });
-    }, []);
+    };
+
+    useEffect(() => {
+      fetchUserData();
+    }, [location.pathname]);
 
     return (
         <div className="head-bg">

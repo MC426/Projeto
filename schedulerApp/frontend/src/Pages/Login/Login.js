@@ -123,7 +123,7 @@ const Login = () => {
       <div>
         <Navbar bg="dark" variant="dark">
           <Container>
-            <Navbar.Brand>Faça seu login</Navbar.Brand>
+            <Navbar.Brand>Voce esta loggado</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar.Text>
@@ -136,13 +136,13 @@ const Login = () => {
         </Navbar>
           <div className="center">
             <h2>You're logged in!</h2>
-            {(
+            {/* {(
               <div>
                 <h2>API Response Data:</h2>
                 <pre>{JSON.stringify(apiData, null, 2)}</pre>
                 <pre> document.cookie </pre>
               </div>
-            )}
+            )} */}
           </div>
           
         </div>
@@ -150,10 +150,6 @@ const Login = () => {
   }
   return (
     <div>
-        <div>
-        <h2>API Response Data:</h2>
-        <pre>{JSON.stringify(apiData, null, 2)}</pre>
-      </div>
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand>Faça seu login</Navbar.Brand>

@@ -50,25 +50,14 @@ const Dashboard = () => {
     <div>
           {userData && userData.email ?
     (<>
-    <div>
-        <div>
-        <h2>API Response Data:</h2>
-        <pre>{JSON.stringify(userData, null, 2)}</pre>
-      </div>
-    </div>
     <div className="container mt-5">
       <div className="row">
         {/* Profile Information */}
         <div className="col-md-4">
           <div className="card">
-            <img
-              src="profile-image.jpg"
-              className="card-img-top"
-              alt="Profile Image"
-            />
             <div className="card-body">
-              <h5 className="card-title"> {userData.name} </h5>
-              <p className="card-text"> {userData.email} </p>
+              <h5 className="card-title"> Usuario: {userData.username} </h5>
+              <p className="card-text"> Email: {userData.email} </p>
             </div>
           </div>
         </div>
