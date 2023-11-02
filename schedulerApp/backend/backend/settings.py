@@ -56,10 +56,13 @@ MIDDLEWARE = [
 
 # allow requests:
 # we can add other domains here. This is just for testing
+'''
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000',
      'http://127.0.0.1:3000',
 ]
+'''
+CORS_ALLOW_ALL_ORIGINS = True # For testing
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -147,3 +150,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+SESSION_COOKIE_SECURE = False  # In production, set to True
+
+#SESSION_COOKIE_NAME = 'eng_software_app'
+
+CSRF_COOKIE_SECURE = False # In production set to True

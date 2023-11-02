@@ -16,19 +16,26 @@ const client = axios.create({
 const Dashboard = () => {
     const [userData, setUserData] = useState(null);
 
+
+
     useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const response = await fetch('/api/user');
-            const data = await response.json();
-            setUserData(data);
-          } catch (error) {
-            console.error('Error fetching user data:', error);
+      const cookies = document.cookie;
+
+      client.get("/api/user", 
+      {
+        withCredentials: true
+      })
+        .then(function (res) {
+          if (res.data && res.data.email) {
+            setUserData(res.data);
+          } else {
+            setUserData(null);
           }
-        };
-      
-        fetchUserData();
-      }, []);
+        })
+        .catch(function (error) {
+          setUserData(null);
+        });
+    }, []);
     
   function submitLogout(e) {
         e.preventDefault();
@@ -42,8 +49,14 @@ const Dashboard = () => {
 
   return (
     <div>
-          {userData ?
+          {userData && userData.email ?
     (<>
+    <div>
+        <div>
+        <h2>API Response Data:</h2>
+        <pre>{JSON.stringify(userData, null, 2)}</pre>
+      </div>
+    </div>
     <div className="container mt-5">
       <div className="row">
         {/* Profile Information */}
@@ -80,7 +93,9 @@ const Dashboard = () => {
         </div>
       </div>
     </div></>)
-    : (<div> Please login first </div>)}
+    : (<div> Please login first 
+        <pre>{JSON.stringify(userData, null, 2)}</pre>
+    </div>)}
     </div>
   );
 };

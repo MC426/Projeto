@@ -13,9 +13,38 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-
+const client = axios.create({
+    baseURL: "http://127.0.0.1:8000"
+});
 
 const Header = () => {
+
+    const [userData, setUserData] = useState(null);
+    const [userState, setUserState] = useState(false);
+
+    useEffect(() => {
+      const cookies = document.cookie;
+
+      console.log(cookies, cookies.jwt);
+
+      client.get("/api/user", 
+      {
+        withCredentials: true
+      })
+        .then(function (res) {
+          if (res.data && res.data.email) {
+            setUserData(res.data);
+            setUserState(true);
+          } else {
+            setUserData(null);
+            setUserState(false);
+          }
+        })
+        .catch(function (error) {
+          setUserData(null);
+          setUserState(false);
+        });
+    }, []);
 
     return (
         <div className="head-bg">
@@ -31,16 +60,18 @@ const Header = () => {
                             <Link to="/hospital" className='list-item text-decoration-none'>Hospitais</Link>
                             <Link to="/contact" className='list-item text-decoration-none'>Contato</Link>
                             {
-                            // userData 
-                            // ?
+                            userState 
+                            ?
                             <Link to="/profile" type="button" className="btn btn-danger">Profile</Link>
                             // <button type="button" className="btn btn-danger" onClick={submitLogout}>Log Out</button>
                             // :
-                            // <Link to="/login" type="button" className="btn btn-danger">Login</Link>
+                            :
+                            <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }
                             {/* {userData &&
                                 <Navbar.Text><FontAwesomeIcon icon={faUser} /><span className="userName">{userData.email}</span></Navbar.Text>
                             } */}
+                            <Link to="/login" type="button" className="btn btn-danger"> {userState} </Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
