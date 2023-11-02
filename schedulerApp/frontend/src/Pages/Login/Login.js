@@ -41,6 +41,7 @@ const Login = () => {
           if (res.data && res.data.email) {
             setCurrentUser(true);
             setApiData(res.data);
+            console.log("logado", res.data);
           } else {
             setCurrentUser(false);
             setApiData(res.data);

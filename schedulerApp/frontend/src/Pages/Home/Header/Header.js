@@ -14,7 +14,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 const client = axios.create({
-    baseURL: "http://127.0.0.1:8000"
+  baseURL: "http://localhost:8000"
 });
 
 const Header = () => {
@@ -71,7 +71,6 @@ const Header = () => {
                             {/* {userData &&
                                 <Navbar.Text><FontAwesomeIcon icon={faUser} /><span className="userName">{userData.email}</span></Navbar.Text>
                             } */}
-                            <Link to="/login" type="button" className="btn btn-danger"> {userState} </Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
