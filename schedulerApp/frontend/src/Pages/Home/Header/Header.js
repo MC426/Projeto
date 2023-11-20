@@ -9,47 +9,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom'; // Import useLocation from react-router-dom
 
+const Header = ({loading, userData}) => {
+  useEffect(() => {
+    console.log('userData has changed at header:', userData, loading);
+  }, [userData, loading]);
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
-
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
-const Header = () => {
-
-    const [userData, setUserData] = useState(null);
-    const [userState, setUserState] = useState(false);
-    const location = useLocation();
-
-    const fetchUserData = () => {
-      const cookies = document.cookie;
-  
-      client.get("/api/user", {
-        withCredentials: true
-      })
-        .then(function (res) {
-          if (res.data && res.data.email) {
-            setUserData(res.data);
-            setUserState(true);
-          } else {
-            setUserData(null);
-            setUserState(false);
-          }
-        })
-        .catch(function (error) {
-          setUserData(null);
-          setUserState(false);
-        });
-    };
-
-    useEffect(() => {
-      fetchUserData();
-    }, [location.pathname]);
-
-    return (
+  return (
         <div className="head-bg">
             <Navbar className="navbar" collapseOnSelect expand="lg">
                 <Container className="container-head">
@@ -63,17 +28,12 @@ const Header = () => {
                             <Link to="/hospital" className='list-item text-decoration-none'>Hospitais</Link>
                             <Link to="/contact" className='list-item text-decoration-none'>Contato</Link>
                             {
-                            userState 
+                            userData
                             ?
                             <Link to="/profile" type="button" className="btn btn-danger">Profile</Link>
-                            // <button type="button" className="btn btn-danger" onClick={submitLogout}>Log Out</button>
-                            // :
                             :
                             <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }
-                            {/* {userData &&
-                                <Navbar.Text><FontAwesomeIcon icon={faUser} /><span className="userName">{userData.email}</span></Navbar.Text>
-                            } */}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

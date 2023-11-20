@@ -15,9 +15,7 @@ const client = axios.create({
   baseURL: "http://localhost:8000"
 });
 
-const Login = () => {
-    const [currentUser, setCurrentUser] = useState(false);
-    const [apiData, setApiData] = useState(null); // State to store the API response data
+const Login = ({userData, setUserData}) => {
     const [registrationToggle, setRegistrationToggle] = useState(false);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
@@ -39,16 +37,14 @@ const Login = () => {
       })
         .then(function (res) {
           if (res.data && res.data.email) {
-            setCurrentUser(true);
-            setApiData(res.data);
+            setUserData(res.data);
             console.log("logado", res.data);
           } else {
-            setCurrentUser(false);
-            setApiData(res.data);
+            setUserData(res.data);
           }
         })
         .catch(function (error) {
-          setCurrentUser(false);
+          setUserData(null);
         });
     }, []);
     
@@ -80,8 +76,8 @@ const Login = () => {
             password: password
             }
         ).then(function(res) {
-          setCurrentUser(true);
-          setApiData(res.data);
+          console.log(res.data);
+          setUserData(res.data);
           const token = res.data.jwt
           document.cookie = `jwt=${token}; path=/`;
         }).catch(function(error){
@@ -99,12 +95,13 @@ const Login = () => {
             password: password
         }
         ).then(function(res) {
-          setCurrentUser(true);
-          setApiData(res.data);
+          console.log(res.data);
+          setUserData(res.data);
           const token = res.data.jwt
           document.cookie = `jwt=${token}; path=/`;
         }).catch(function(error){
-          console.log("Error");
+          console.log("Error on login.");
+          console.log(error);
         });
     }
 
@@ -114,11 +111,11 @@ const Login = () => {
         "/api/logout",
         {withCredentials: true}
         ).then(function(res) {
-        setCurrentUser(false);
+          setUserData(null);
         });
     }
 
-  if (currentUser) {
+  if (userData) {
     return (
       <div>
         <Navbar bg="dark" variant="dark">

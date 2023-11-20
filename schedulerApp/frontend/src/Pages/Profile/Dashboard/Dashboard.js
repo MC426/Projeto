@@ -12,11 +12,8 @@ const client = axios.create({
   baseURL: "http://localhost:8000"
 });
 
-const Dashboard = () => {
-    const [userData, setUserData] = useState(null);
-
-
-
+const Dashboard = ({userData, setUserData}) => {
+    
     useEffect(() => {
       const cookies = document.cookie;
 
@@ -48,7 +45,7 @@ const Dashboard = () => {
 
   return (
     <div>
-          {userData && userData.email ?
+          {userData ?
     (<>
     <div className="container mt-5">
       <div className="row">
