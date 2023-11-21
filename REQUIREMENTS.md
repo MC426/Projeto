@@ -1,5 +1,11 @@
 Para iniciar a elicitação de requisitos, primeiramente utilizamos da entrevista com 2 médicos formados na UNICAMP. Segue o formulário a ser preenchido e as duas respostas. Posteriormente, utilizamos das técnica de benchmarking e brainstorming.
 
+# Entrevistas
+
+O obejtivo das entrevistas foi apenas fazer um mapeamento sobre a rotina de um médico, como são feitos os agendamentos, como os pacientes são direcionados, etc. e entender quais são as principais dificuldades que ele enfrenta no dia a dia. A partir disso, foi possível identificar alguns requisitos que podem ser implementados no sistema. Os principais estão ligados a burocracia dos sistemas utilizados, da curva de aprendizado da tecnologia.
+
+Outro ponto levantado foi a disponibilização de dados de pacientes como por exemplo laudos de exames, porém não será possível implementar, pois demandaria muito esforço para entrar nos conformes da LGPD.
+
 **Roteiro das entrevistas:**
 
 Bom dia. Estamos desenvolvendo um sistema de gerenciamento médico e gostaríamos de ouvir sua opinião como profissional da área de saúde. Você pode responder por áudio ou por escrito. Obrigado pela sua colaboração!
@@ -14,9 +20,9 @@ Bom dia. Estamos desenvolvendo um sistema de gerenciamento médico e gostaríamo
 8. Existe algum tipo de dúvida frequente dos pacientes que você acha que poderia ser melhor respondida ou abordada por meio de um sistema de gerenciamento médico?
 9. Algo a mais que deseje acrescentar?
 
-Respostas a entrevista:
+## Respostas a entrevista:
 
-Primeira resposta:
+### Primeira resposta:
 
 **1. Qual seu nome e profissão?**
 
@@ -54,7 +60,7 @@ Essa questão de agendamento e alocação de recursos é feita muito mais pelo g
 
 Na minha área, oncologia, os pacientes têm muitas dúvidas sobre o manejo de efeitos colaterais de quimioterapia. Já existem alguns centros de referência que usam aplicativos de comunicação entre pacientes e enfermeiras (pacientes reportam efeitos colaterais e são orientados pelos enfermeiros) isso reduz idas ao pronto socorro, reduz internação hospitalar e aumenta adesão ao tratamento e eficácia terapêutica.
 
-Segunda resposta: 
+### Segunda resposta: 
 
 **1. Qual seu nome e profissão?**
 
@@ -78,7 +84,7 @@ Mesma resposta do último item.
 
 **6. Na sua experiência médica, quão comum é um paciente ter que ser realocado entre especialidades? Que tipo de informação ou funcionalidade você acredita que poderia ser fornecida para evitar essa realocação?**
 
-É comum sim, embora em geral em um hospital privado o médico responsável pela internação mantenha o mesmo o paciente pode circular por diversos setores e especialidades no hospital. Já nos hospitais públicos pode ser até mais comum pq muitos hospitais públicos nem trabalham com médico responsável pela internação (o responsável é sempre o diretor clínico ou chefe da especialidade.
+É comum sim, embora em geral em um hospital privado o médico responsável pela internação mantenha o mesmo o paciente pode circular por diversos setores e especialidades no hospital. Já nos hospitais públicos pode ser até mais comum pq muitos hospitais públicos nem trabalham com médico responsável pela internação (o responsável é sempre o diretor clínico ou chefe da especialidade).
 
 **7. Que funcionalidades você gostaria de ver para melhorar o agendamento de consultas e a alocação de recursos, como salas de cirurgia ou leitos?**
 
@@ -89,13 +95,20 @@ Flexibilidade de agendamento com horários/durações variados para os diferente
 Confirmação de agenda com alerta, dúvidas referente aos medicamentos prescritos (nome, horarios, efeitos colaterais) , acesso a laudo de exames, orientações de preparos para os exames e procedimentos (quando necessários)
 
 
-**Benchmarking**
+# Benchmarking
+
+A ideia com o Benchmarking foi mapear quais as principais soluções disponíveis no mercado e suas funcionalidades principais. Destacamos as seguintes soluções:
 
 **1. Conecte-SUS**
 
 O sistema conecte-SUS, acessível em https://conectesus-paciente.saude.gov.br/login [acesso em 01/10/23] possível uma ampla gama de funcionalidades para os pacientes, como cartilhas de vacinas, localizar hospitais próximos, e acesso aos dados de saúde de brasileiros, como por exemplo registro de vacinas tomadas.
 
 A ampla disponibilidade de funcionalidades e o nível de integração são pontos muito positivos deste site.
+
+![alt text](./imagens/print-mapa-SUS.png)
+
+![alt text](./imagens/print-dashboard-SUS.png)
+
 
 **2. Medware**
 Essa é uma das soluções líder para médicos de hospitais e clínicas. Alguns de seus benefícios são:
