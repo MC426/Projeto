@@ -107,7 +107,11 @@ A ampla disponibilidade de funcionalidades e o nível de integração são ponto
 
 ![alt text](./imagens/print-mapa-SUS.png)
 
+Na imagem acima vemos um print de um mapa de Hospitais próximos no site do SUS. Essa funcionalidade é muito útil, pois permite a visualização das localidades e faço acesso.
+
 ![alt text](./imagens/print-dashboard-SUS.png)
+
+O dashboard acima mostra as diversas funções disponíveis no site (print tirado em 2023-10-01).
 
 
 **2. Medware**
@@ -123,7 +127,15 @@ Plataforma para agendamento de consultas e busca de médicos.
  Permite o agendamento online de consultas, busca de profissionais em sua região, acesso a avaliações e recomendações dos profissionais, etc. De faço uso e sem fricção.
 
 
-**Brainstorming**
+### Conclusões do Benchmarking:
+
+Concluimos que a falta de fricção do usuário é algo buscado por todas as soluções. Destacamos a faciliade de navegação no SUS e no Doctoralia, que são de fácil uso desde a primeira vez. 
+
+Do app Doctortalia, o sistema de avaliações e de busca na região é de grande utilidade para o usuário, e pode ser implementado no nosso sistema alguma funcionalidade similar.
+
+# Brainstorming
+
+`Feitas as entrevistas e o benchmarking, já temos ideias do que pode ou não ser útil implementar. Fazemos então um brainstorm para decidirmos qual será o foco do nosso projeto.`
 
 - Objetivo da plataforma: permitir que médicos disponibilizem suas agendas para pacientes agendar consultas.
 - Permitir que um usuário agende, mude de horário ou desmarque consultas, sem atrito e sem exigir demasiadas informações pessoais
