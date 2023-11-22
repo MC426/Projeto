@@ -140,7 +140,7 @@ Do app Doctortalia, o sistema de avaliações e de busca na região é de grande
 - Objetivo da plataforma: permitir que médicos disponibilizem suas agendas para pacientes agendar consultas.
 - Permitir que um usuário agende, mude de horário ou desmarque consultas, sem atrito e sem exigir demasiadas informações pessoais
 - Permitir que haja notificações em caso de possível adiantamento da consulta
-- Permitir um sistema de avaliação de médicos (como no Doctoralia)
+- Permitir um sistema de avaliação de médicos (opcional)
 
 **Requisitos do sistema:**
 
@@ -150,4 +150,9 @@ Do app Doctortalia, o sistema de avaliações e de busca na região é de grande
 - A plataforma deve permitir que um médico acesse e cancele as consultas que tem agendadas em sua agenda.
 - A plataforma deve permitir que um centro cirúrgico disponibilize aos médicos os horários disponíveis de suas salas.
 - A plataforma deve permitir que o médico reserve uma sala de centro cirúrgico.
-- A plataforma deve ter um sistema de avaliação de médicos
+
+
+**Adicionais**
+Alguns outros pontos, não essenciais, mas que podem ser implementados:
+
+- Um sistema de avaliação de médicos
