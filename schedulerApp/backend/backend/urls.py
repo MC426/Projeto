@@ -23,6 +23,7 @@ router = routers.DefaultRouter()
 router.register(r'appointments', views.AppointmentView)
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/', include('user_api.urls')),
     path('api/appointments/', views.create_appointment, name='create_appointment')

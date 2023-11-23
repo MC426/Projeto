@@ -12,25 +12,46 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 const client = axios.create({
-  baseURL: "http://127.0.0.1:8000"
+  baseURL: "http://localhost:8000"
 });
 
 const Login = () => {
-    const [currentUser, setCurrentUser] = useState();
+    const [currentUser, setCurrentUser] = useState(false);
+    const [apiData, setApiData] = useState(null); // State to store the API response data
     const [registrationToggle, setRegistrationToggle] = useState(false);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        client.get("/api/user")
-        .then(function(res) {
-        setCurrentUser(true);
+      const cookies = document.cookie.split('; ').reduce((cookieObject, cookie) => {
+        const [name, value] = cookie.split('=');
+        cookieObject[name] = value;
+        return cookieObject;
+      }, {});
+      
+
+      console.log("Login: ", cookies, cookies.jwt);
+
+      client.get("/api/user", 
+      {
+        withCredentials: true
+      })
+        .then(function (res) {
+          if (res.data && res.data.email) {
+            setCurrentUser(true);
+            setApiData(res.data);
+            console.log("logado", res.data);
+          } else {
+            setCurrentUser(false);
+            setApiData(res.data);
+          }
         })
-        .catch(function(error) {
-        setCurrentUser(false);
+        .catch(function (error) {
+          setCurrentUser(false);
         });
     }, []);
+    
 
     function update_form_btn() {
         if (registrationToggle) {
@@ -59,7 +80,12 @@ const Login = () => {
             password: password
             }
         ).then(function(res) {
-            setCurrentUser(true);
+          setCurrentUser(true);
+          setApiData(res.data);
+          const token = res.data.jwt
+          document.cookie = `jwt=${token}; path=/`;
+        }).catch(function(error){
+          console.log("Error");
         });
         });
     }
@@ -73,7 +99,12 @@ const Login = () => {
             password: password
         }
         ).then(function(res) {
-        setCurrentUser(true);
+          setCurrentUser(true);
+          setApiData(res.data);
+          const token = res.data.jwt
+          document.cookie = `jwt=${token}; path=/`;
+        }).catch(function(error){
+          console.log("Error");
         });
     }
 
@@ -92,7 +123,7 @@ const Login = () => {
       <div>
         <Navbar bg="dark" variant="dark">
           <Container>
-            <Navbar.Brand>Faça seu login</Navbar.Brand>
+            <Navbar.Brand>Voce esta loggado</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar.Text>
@@ -105,7 +136,15 @@ const Login = () => {
         </Navbar>
           <div className="center">
             <h2>You're logged in!</h2>
+            {/* {(
+              <div>
+                <h2>API Response Data:</h2>
+                <pre>{JSON.stringify(apiData, null, 2)}</pre>
+                <pre> document.cookie </pre>
+              </div>
+            )} */}
           </div>
+          
         </div>
     );
   }
