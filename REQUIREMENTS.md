@@ -135,7 +135,6 @@ Do app Doctortalia, o sistema de avaliações e de busca na região é de grande
 
 # Brainstorming
 
-`Feitas as entrevistas e o benchmarking, já temos ideias do que pode ou não ser útil implementar. Fazemos então um brainstorm para decidirmos qual será o foco do nosso projeto.`
 
 De modo a definir o que exatamente iríamos desenvolver, realizou-se uma sessão de brainstorming considerando as aplicações levantadas na etapa de benchmarking e os dados das entrevistas.
 
