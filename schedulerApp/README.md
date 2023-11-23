@@ -20,3 +20,7 @@ Then, to start the server run
 ```
 npm start
 ```
+
+```
+python3 -m pip install PyJWT
+```

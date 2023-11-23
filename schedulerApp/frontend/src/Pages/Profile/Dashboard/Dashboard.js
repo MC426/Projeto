@@ -9,26 +9,32 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 const client = axios.create({
-  baseURL: "http://127.0.0.1:8000"
+  baseURL: "http://localhost:8000"
 });
-
 
 const Dashboard = () => {
     const [userData, setUserData] = useState(null);
 
+
+
     useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const response = await fetch('/api/user');
-            const data = await response.json();
-            setUserData(data);
-          } catch (error) {
-            console.error('Error fetching user data:', error);
+      const cookies = document.cookie;
+
+      client.get("/api/user", 
+      {
+        withCredentials: true
+      })
+        .then(function (res) {
+          if (res.data && res.data.email) {
+            setUserData(res.data);
+          } else {
+            setUserData(null);
           }
-        };
-      
-        fetchUserData();
-      }, []);
+        })
+        .catch(function (error) {
+          setUserData(null);
+        });
+    }, []);
     
   function submitLogout(e) {
         e.preventDefault();
@@ -42,21 +48,16 @@ const Dashboard = () => {
 
   return (
     <div>
-          {userData ?
+          {userData && userData.email ?
     (<>
     <div className="container mt-5">
       <div className="row">
         {/* Profile Information */}
         <div className="col-md-4">
           <div className="card">
-            <img
-              src="profile-image.jpg"
-              className="card-img-top"
-              alt="Profile Image"
-            />
             <div className="card-body">
-              <h5 className="card-title"> {userData.name} </h5>
-              <p className="card-text"> {userData.email} </p>
+              <h5 className="card-title"> Usuario: {userData.username} </h5>
+              <p className="card-text"> Email: {userData.email} </p>
             </div>
           </div>
         </div>
@@ -80,7 +81,9 @@ const Dashboard = () => {
         </div>
       </div>
     </div></>)
-    : (<div> Please login first </div>)}
+    : (<div> Please login first 
+        <pre>{JSON.stringify(userData, null, 2)}</pre>
+    </div>)}
     </div>
   );
 };
