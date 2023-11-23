@@ -12,30 +12,8 @@ const client = axios.create({
   baseURL: "http://localhost:8000"
 });
 
-const Dashboard = () => {
-    const [userData, setUserData] = useState(null);
-
-
-
-    useEffect(() => {
-      const cookies = document.cookie;
-
-      client.get("/api/user", 
-      {
-        withCredentials: true
-      })
-        .then(function (res) {
-          if (res.data && res.data.email) {
-            setUserData(res.data);
-          } else {
-            setUserData(null);
-          }
-        })
-        .catch(function (error) {
-          setUserData(null);
-        });
-    }, []);
-    
+const Dashboard = ({userData, setUserData}) => {
+  
   function submitLogout(e) {
         e.preventDefault();
         client.post(
@@ -48,7 +26,7 @@ const Dashboard = () => {
 
   return (
     <div>
-          {userData && userData.email ?
+          {userData ?
     (<>
     <div className="container mt-5">
       <div className="row">
@@ -81,8 +59,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div></>)
-    : (<div> Please login first 
-        <pre>{JSON.stringify(userData, null, 2)}</pre>
+    : (<div> <h1>Por favor faça login primeiro</h1> 
     </div>)}
     </div>
   );
