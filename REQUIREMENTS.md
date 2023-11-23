@@ -1,4 +1,4 @@
-Para iniciar a elicitação de requisitos, primeiramente utilizamos da entrevista com 2 médicos formados na UNICAMP. Segue o formulário a ser preenchido e as duas respostas. Posteriormente, utilizamos das técnica de benchmarking e brainstorming.
+Para iniciar a elicitação de requisitos, primeiramente utilizamos da entrevista com 2 médicos formados na UNICAMP. A entrevista foi elaborada considerando aspectos gerais do dia a dia de um médico que hipotetizamos ser possível facilitar por meio de um sistema informatizado, como agendamentos, gerenciamento de documentos e alocação de salas. Segue o formulário a ser preenchido e as duas respostas. Posteriormente, utilizamos das técnica de benchmarking e brainstorming.
 
 **Roteiro das entrevistas:**
 
@@ -91,6 +91,8 @@ Confirmação de agenda com alerta, dúvidas referente aos medicamentos prescrit
 
 **Benchmarking**
 
+Para benchmarking, objetivamos analisar soluções já no mercado voltadas a facilitar o dia a dia de médicos e pacientes. Nosso objetivo foi levantar algumas características que tornam esses sistemas úteis no domínio no qual estão inseridos, podendo servir como inspiração para o nosso projeto. Não pretendemos necessariamente competir com essas soluções, mas apenas buscar referências quanto àquilo que é viável desenvolver, ao mesmo tempo que é útil para as partes envolvidas em procedimentos médicos.
+
 **1. Conecte-SUS**
 
 O sistema conecte-SUS, acessível em https://conectesus-paciente.saude.gov.br/login [acesso em 01/10/23] possível uma ampla gama de funcionalidades para os pacientes, como cartilhas de vacinas, localizar hospitais próximos, e acesso aos dados de saúde de brasileiros, como por exemplo registro de vacinas tomadas.
@@ -112,9 +114,18 @@ Plataforma para agendamento de consultas e busca de médicos.
 
 **Brainstorming**
 
-- Objetivo da plataforma: permitir que médicos disponibilizem suas agendas para pacientes agendar consultas.
-- Permitir que um usuário agende, mude de horário ou desmarque consultas, sem atrito e sem exigir demasiadas informações pessoais
-- Permitir que haja notificações em caso de possível adiantamento da consulta
+De modo a definir o que exatamente iríamos desenvolver, realizou-se uma sessão de brainstorming considerando as aplicações levantadas na etapa de benchmarking e os dados das entrevistas.
+
+Considerando as informações fornecidas pelos médicos entrevistados, percebemos que a informatização e a facilidade de realizar agendamentos de consultas e salas conforme desejado são características desejadas. Ao mesmo tempo, descartou-se o desenvolvimento de sistemas que envolvessem o gerenciamento de exames ou mesmo informações relativas a medicamentos - uma vez que esses são aspectos em relação aos quais a equipe precisaria possuir maior domínio de medicina (para produzir um conteúdo informativo de qualidade) e direito (considerando legislações como a LGPD). Desse modo, o brainstorming voltou-se principalmente para a questão logística dos horários de consultas e reservas de salas para um hospital.
+
+Analisando as soluções levantadas no benchmarking, percebeu-se o gosto dos usuários - pacientes e médicos - por sistemas informatizados simples de usar, diretos e que melhorem processos burocráticos que anteriormente precisariam ser realizados por telefone ou presencialmente em uma secretaria. Essas características foram consideradas como essenciais no momento de definir o que iremos desenvolver.
+
+Objetivos da plataforma:
+
+- Permitir que médicos disponibilizem suas agendas para pacientes agendar consultas.
+- Permitir que médicos reservem salas em um hospital conforme disponibilidade - ou seja, conforme outros médicos também reservarem.
+- Permitir que um paciente agende, mude de horário ou desmarque consultas, sem atrito e sem exigir demasiadas informações pessoais.
+- Permitir que haja notificações em caso de possível adiantamento da consulta.
 
 **Requisitos do sistema:**
 
