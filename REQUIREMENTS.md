@@ -95,7 +95,7 @@ Flexibilidade de agendamento com horários/durações variados para os diferente
 Confirmação de agenda com alerta, dúvidas referente aos medicamentos prescritos (nome, horarios, efeitos colaterais) , acesso a laudo de exames, orientações de preparos para os exames e procedimentos (quando necessários)
 
 
-**Benchmarking**
+# Benchmarking
 
 Para benchmarking, objetivamos analisar soluções já no mercado voltadas a facilitar o dia a dia de médicos e pacientes. Nosso objetivo foi levantar algumas características que tornam esses sistemas úteis no domínio no qual estão inseridos, podendo servir como inspiração para o nosso projeto. Não pretendemos necessariamente competir com essas soluções, mas apenas buscar referências quanto àquilo que é viável desenvolver, ao mesmo tempo que é útil para as partes envolvidas em procedimentos médicos.
 
