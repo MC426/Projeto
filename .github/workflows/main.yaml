@@ -28,3 +28,8 @@ jobs:
       - name: Run tests
         run: |
           python -m unittest discover -s backend/tests/
+      
+      - name: Run Django tests
+        run: |
+          python manage.py test user_api.tests
+          python manage.py test scheduler.tests
