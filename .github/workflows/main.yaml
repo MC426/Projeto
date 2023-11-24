@@ -21,6 +21,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
+          pip install -r schedulerApp/backend/requirements.txt
           pip install backend/
 
       - name: Run tests
