@@ -1,5 +1,4 @@
 asgiref==3.7.2
-backend @ file:///Users/naimsantos/Documents/Projeto/backend
 certifi==2023.7.22
 cffi==1.16.0
 contourpy==1.1.1
@@ -22,7 +21,6 @@ pipenv==2023.9.8
 pipfile==0.0.2
 platformdirs==3.10.0
 pycparser==2.21
-Pygments @ file:///private/tmp/pygments-20230806-5921-1vpw7cv/Pygments-2.16.1
 PyJWT==2.8.0
 pyparsing==3.1.1
 python-dateutil==2.8.2
@@ -30,5 +28,4 @@ pytz==2023.3.post1
 six==1.16.0
 sqlparse==0.4.4
 toml==0.10.2
-user-management @ file:///Users/naimsantos/Documents/Projeto/backend
 virtualenv==20.24.5
