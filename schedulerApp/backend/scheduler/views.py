@@ -40,14 +40,15 @@ class AppointmentListView(APIView):
         # Get query parameters
         medico_id = request.query_params.get('medico_id')
         paciente_id = request.query_params.get('paciente_id')
+        
+        if not medico_id and not paciente_id:
+            raise ValidationError("Either 'medico_id' or 'paciente_id' must be provided.")
 
         # Filter appointments based on query parameters
         if medico_id:
             appointments = Appointment.objects.filter(medico__user_id=medico_id)
         elif paciente_id:
             appointments = Appointment.objects.filter(paciente__user_id=paciente_id)
-        else:
-            raise ValidationError("Either 'medico_id' or 'paciente_id' must be provided.")
 
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
