@@ -3,9 +3,7 @@ name: Python CI
 on:
   push:
     branches:
-      - main
-      - develop
-      - feat/CI
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
