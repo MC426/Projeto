@@ -29,5 +29,4 @@ jobs:
       
       - name: Run Django tests
         run: |
-          python manage.py test user_api.tests
-          python manage.py test scheduler.tests
+          python manage.py test
