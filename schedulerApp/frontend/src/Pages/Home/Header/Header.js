@@ -22,7 +22,7 @@ const Header = ({loading, userData}) => {
                             <Link to="/about" className='list-item text-decoration-none'>Sobre</Link>
                             <Link to="/service" className='list-item text-decoration-none'>Serviços</Link>
                             <Link to="/hospital" className='list-item text-decoration-none'>Hospitais</Link>
-                            <Link to="/contact" className='list-item text-decoration-none'>Contato</Link>
+                            <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
                             {
                             userData
                             ?

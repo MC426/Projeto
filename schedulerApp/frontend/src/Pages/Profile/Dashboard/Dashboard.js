@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -12,6 +13,38 @@ const client = axios.create({
 });
 
 const Dashboard = ({userData, setUserData}) => {
+
+
+  const fetchUserData = () => {
+
+    const cookies = document.cookie.split('; ').reduce((cookieObject, cookie) => {
+      const [name, value] = cookie.split('=');
+      cookieObject[name] = value;
+      return cookieObject;
+    }, {});
+    
+    console.log("Running app to fetch user data: ", cookies, cookies.jwt);
+
+    client.get("/api/user", 
+    {
+      withCredentials: true
+    })
+      .then(function (res) {
+        if (res.data && res.data.email) {
+          setUserData(res.data);
+          console.log("logado", res.data);
+        } else {
+          setUserData(res.data);
+        }
+      })
+      .catch(function (error) {
+        setUserData(null);
+      });
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []); // Only run once on component mount
   
   function submitLogout(e) {
         e.preventDefault();
