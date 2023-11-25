@@ -21,7 +21,7 @@ const ScheduleForm = ({userData}) => {
   });
 
   var user_id = null;
-  useEffect(() => {
+  const getUserId = () => {
     client.get("/api/user", 
     {
       withCredentials: true
@@ -35,8 +35,9 @@ const ScheduleForm = ({userData}) => {
       .catch(function (error) {
         console.log("nao conseguiu o id do usuario");
       });
+    return user_id;
+  };
 
-  }, []);
 
   const handleChange = (name, value) => {
     setFormData({
@@ -51,6 +52,7 @@ const ScheduleForm = ({userData}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here
+    getUserId();
     console.log('Form data submitted:', formData);
     const requestData = {
       start_ts: dateToString(formData.start_time),
