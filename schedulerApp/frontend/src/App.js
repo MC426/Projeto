@@ -8,6 +8,7 @@ import Dashboard from './Pages/Profile/Dashboard/Dashboard'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ScheduleForm from './Pages/Scheduler/ScheduleForm';
+import ScheduleList from './Pages/ListSchedule/ListSchedule';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -62,6 +63,7 @@ function App() {
         <Route path="/login" element = {<Login userData={userData} setUserData={setUserData} />} />
         <Route path="/profile" element = {<Dashboard  userData={userData} setUserData={setUserData} />} />
         <Route path="/agenda" element = {<ScheduleForm userData={userData}  />} />
+        <Route path="/listar-agenda" element = {<ScheduleList userData={userData}  />} />
       </Routes>
       <Footer/>
     </Router>

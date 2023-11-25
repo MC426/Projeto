@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import axios from 'axios';
@@ -20,6 +20,24 @@ const ScheduleForm = ({userData}) => {
     end_time: '',
   });
 
+  var user_id = null;
+  useEffect(() => {
+    client.get("/api/user", 
+    {
+      withCredentials: true
+    })
+      .then(function (res) {
+        if (res.data && res.data.email) {
+          user_id = res.data.user_id;
+          console.log("conseguiu logar", res.data);
+        }
+      })
+      .catch(function (error) {
+        console.log("nao conseguiu o id do usuario");
+      });
+
+  }, []);
+
   const handleChange = (name, value) => {
     setFormData({
       ...formData,
@@ -37,7 +55,7 @@ const ScheduleForm = ({userData}) => {
     const requestData = {
       start_ts: dateToString(formData.start_time),
       end_ts: dateToString(formData.end_time),
-      medico: userData.user_id
+      medico: user_id
     };
     console.log(requestData);
 

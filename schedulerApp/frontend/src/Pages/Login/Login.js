@@ -143,6 +143,9 @@ const Login = ({userData, setUserData}) => {
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand>Faça seu login</Navbar.Brand>
+        <form onSubmit={e => submitLogout(e)}>
+                  <Button type="submit" variant="light">Log out</Button>
+                </form>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
