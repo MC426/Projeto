@@ -14,32 +14,50 @@ class AppointmentTests(TestCase):
         AppUser.objects.create(email='medico1@a.com', password='teste')
         AppUser.objects.create(email='teste@a.com', password='teste')
         self.client = APIClient()
-        self.clock_time = datetime(2023,1,1)
-    
-    def test_appointment_operations(self):
-        user1 = AppUser.objects.get(email = 'user1@a.com')
-        user2 = AppUser.objects.get(email = 'user2@a.com')
-        medico = AppUser.objects.get(email = 'medico1@a.com')
-        url_create = reverse('create')
-        data_schedule = { 
-            'start_ts' : self.clock_time,
-            'end_ts' : self.clock_time + timedelta(hours = 1), 
-            'medico' : medico.user_id,
-            'paciente' : user1.user_id,
+        self.clock_time = datetime(2023, 1, 1)
+        self.url_create = reverse('create')
+        self.url_list = reverse('list')
+        
+    def create_appointment(self, start_ts, end_ts, medico, paciente):
+        data_schedule = {
+            'start_ts': start_ts,
+            'end_ts': end_ts,
+            'medico': medico.user_id,
+            'paciente': paciente.user_id,
         }
-        response_create = self.client.post(url_create, data_schedule, format = 'json')
+        return self.client.post(self.url_create, data_schedule, format='json')
+
+
+    def test_create_appointment(self):
+        user1 = AppUser.objects.get(email='user1@a.com')
+        medico = AppUser.objects.get(email='medico1@a.com')
+        response_create = self.create_appointment(self.clock_time, self.clock_time + timedelta(hours=1), medico, user1)
         self.assertEqual(response_create.status_code, status.HTTP_201_CREATED)
 
-        # List appointments for the created user
-        url_list = reverse('list')
-        response_list = self.client.get(url_list, {'medico_id': medico.user_id})
+    def test_list_appointments_for_medico(self):
+        user1 = AppUser.objects.get(email='user1@a.com')
+        medico = AppUser.objects.get(email='medico1@a.com')
+        self.create_appointment(self.clock_time, self.clock_time + timedelta(hours=1), medico, user1)
+        response_list = self.client.get(self.url_list, {'medico_id': medico.user_id})
         self.assertEqual(response_list.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response_list.data), 1)  # Assuming only one appointment is created
-        # List appointments with incomplete query parameters
+        self.assertEqual(len(response_list.data), 1)
+    
+    def test_list_appointments_for_paciente(self):
+        user1 = AppUser.objects.get(email='user1@a.com')
+        medico = AppUser.objects.get(email='medico1@a.com')
+        self.create_appointment(self.clock_time, self.clock_time + timedelta(hours=1), medico, user1)
+        response_list = self.client.get(self.url_list, {'paciente_id': user1.user_id})
+        self.assertEqual(response_list.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response_list.data), 1)
+
+    def test_list_appointments_with_incomplete_parameters(self):
         url_list_incomplete = reverse('list') + '?medico_id='
         response_list_incomplete = self.client.get(url_list_incomplete)
         self.assertEqual(response_list_incomplete.status_code, status.HTTP_400_BAD_REQUEST)
-        # Custom validation with invalid date format
+
+    def test_validation_with_invalid_date_format(self):
+        medico = AppUser.objects.get(email='medico1@a.com')
+        user1 = AppUser.objects.get(email='user1@a.com')
         url_validation_invalid_date = reverse('create')
         data_validation_invalid_date = {
             'start_ts': 'invalid_date',
@@ -47,62 +65,57 @@ class AppointmentTests(TestCase):
             'medico': medico.user_id,
             'paciente': user1.user_id,
         }
-        response_validation_invalid_date = self.client.post(url_validation_invalid_date, data_validation_invalid_date, format='json')
+        response_validation_invalid_date = self.client.post(url_validation_invalid_date, data_validation_invalid_date,
+                                                            format='json')
         self.assertEqual(response_validation_invalid_date.status_code, status.HTTP_400_BAD_REQUEST)
 
-        # Custom validation with missing fields
+    def test_validation_with_missing_fields(self):
+        medico = AppUser.objects.get(email='medico1@a.com')
+        user1 = AppUser.objects.get(email='user1@a.com')
         url_validation_missing_fields = reverse('create')
         data_validation_missing_fields = {
             'medico': medico.user_id,
             'paciente': user1.user_id,
         }
-        response_validation_missing_fields = self.client.post(url_validation_missing_fields, data_validation_missing_fields, format='json')
+        response_validation_missing_fields = self.client.post(url_validation_missing_fields,
+                                                              data_validation_missing_fields, format='json')
         self.assertEqual(response_validation_missing_fields.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('start_ts', response_validation_missing_fields.data)
         self.assertIn('end_ts', response_validation_missing_fields.data)
-        # Create another appointment
-        url_create_another = reverse('create')
-        data_create_another = {
-            'start_ts': self.clock_time + timedelta(hours = 2),
-            'end_ts': self.clock_time + timedelta(hours=3),
-            'medico': medico.user_id,
-            'paciente': user2.user_id,
-        }
-        response_create_another = self.client.post(url_create_another, data_create_another, format='json')
-        self.assertEqual(response_create_another.status_code, status.HTTP_201_CREATED)
-        # List appointments with invalid query parameters
+
+    def test_list_appointments_with_invalid_parameters(self):
         url_list_invalid_params = reverse('list') + '?invalid_param=1'
         response_list_invalid_params = self.client.get(url_list_invalid_params)
         self.assertEqual(response_list_invalid_params.status_code, status.HTTP_400_BAD_REQUEST)
 
-        # List appointments with negative query parameters
+    def test_list_appointments_with_negative_parameters(self):
         url_list_negative_params = reverse('list') + '?medico_id=-1'
         response_list_negative_params = self.client.get(url_list_negative_params)
         self.assertEqual(response_list_negative_params.status_code, status.HTTP_200_OK)
-        # Create a third appointment with overlap
-        url_create_third = reverse('create')
-        data_create_third = {
-            'start_ts': self.clock_time,
-            'end_ts': self.clock_time + timedelta(hours=2),
-            'medico': medico.user_id,
-            'paciente': user2.user_id,
-        }
 
-        # Print data for debugging
-        # print('Creating a third appointment with overlap. Data:', data_create_third)
 
-        response_create_third = self.client.post(url_create_third, data_create_third, format='json')
-        self.assertEqual(response_create_third.status_code, status.HTTP_400_BAD_REQUEST)
-        # print('Response for creating a third appointment with overlap:', response_create_third.data)
+    def create_appointment_test(self, start_ts, end_ts):
+        user2 = AppUser.objects.get(email='user2@a.com')
+        medico = AppUser.objects.get(email='medico1@a.com')
+        return self.create_appointment(start_ts, end_ts, medico, user2)
 
-        #if response_create_third.status_code == status.HTTP_400_BAD_REQUEST:
-        #    print('Validation error:', response_create_third.data)
-        # Create a appointment with overlap of end, but not start:
-        data_create_4 = {
-            'start_ts': self.clock_time + timedelta(hours=-1),
-            'end_ts': self.clock_time + timedelta(hours=0.5),
-            'medico': medico.user_id,
-            'paciente': user2.user_id,
-        }
-        response_create_4 = self.client.post(url_create, data_create_4, format='json')
-        self.assertEqual(response_create_4.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_overlap_start_middle(self):
+        self.create_appointment_test(self.clock_time, self.clock_time + timedelta(hours = 1))
+        response = self.create_appointment_test(self.clock_time + timedelta(minutes=30), self.clock_time + timedelta(hours=1, minutes=30))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_overlap_start_past(self):
+        self.create_appointment_test(self.clock_time, self.clock_time + timedelta(hours = 1))
+        response = self.create_appointment_test(self.clock_time - timedelta(hours=1), self.clock_time + timedelta(minutes=30))                 
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) 
+
+    def test_overlap_middle(self):
+        self.create_appointment_test(self.clock_time, self.clock_time + timedelta(hours = 1))
+        response = self.create_appointment_test(self.clock_time + timedelta(minutes=30), self.clock_time + timedelta(minutes=45))
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_overlap_same_time(self):
+        self.create_appointment_test(self.clock_time, self.clock_time + timedelta(hours = 1))
+        response = self.create_appointment_test(self.clock_time, self.clock_time + timedelta(hours=1))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
