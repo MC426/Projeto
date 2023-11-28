@@ -22,6 +22,14 @@ class AppointmentCreateView(APIView):
         medico = validated_data.get('medico')
         start_ts = validated_data.get('start_ts')
         end_ts = validated_data.get('end_ts')
+        if not start_ts or not end_ts:
+            raise ValidationError('Both start_ts and end_ts must be provided.')
+
+        if start_ts > end_ts:
+            raise ValidationError('start_ts must be less than end_ts.')
+
+        if not medico:
+            raise ValidationError('Medico must be provided.')
 
         if medico and start_ts and end_ts:
             overlapping_appointments = Appointment.objects.filter(
