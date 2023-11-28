@@ -1,60 +1,21 @@
 import React from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useUser } from './../../../UserProvider';
 
-
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
-
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
-const Dashboard = ({userData, setUserData}) => {
-
-
-  const fetchUserData = () => {
-
-    const cookies = document.cookie.split('; ').reduce((cookieObject, cookie) => {
-      const [name, value] = cookie.split('=');
-      cookieObject[name] = value;
-      return cookieObject;
-    }, {});
-    
-    console.log("Running app to fetch user data: ", cookies, cookies.jwt);
-
-    client.get("/api/user", 
-    {
-      withCredentials: true
-    })
-      .then(function (res) {
-        if (res.data && res.data.email) {
-          setUserData(res.data);
-          console.log("logado", res.data);
-        } else {
-          setUserData(res.data);
-        }
-      })
-      .catch(function (error) {
-        setUserData(null);
-      });
-  };
+const Dashboard = () => {
+  const { userData, getUser, logoutUser } = useUser();
 
   useEffect(() => {
-    fetchUserData();
-  }, []); // Only run once on component mount
+    getUser();
+  }, []); 
   
   function submitLogout(e) {
-        e.preventDefault();
-        client.post(
-        "/api/logout",
-        {withCredentials: true}
-        ).then(function(res) {
-            setUserData(null);
-        });
-    }
+    e.preventDefault();
+    console.log("dashboard tenta dar logout");
+    logoutUser();
+    console.log(userData);
+  }
 
   return (
     <div>

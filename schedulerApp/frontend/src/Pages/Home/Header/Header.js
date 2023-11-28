@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import logo from '../../../Images/logo ic.png';
 import './Header.css';
 import { useEffect } from 'react';
+import { useUser } from './../../../UserProvider';
 
-const Header = ({loading, userData}) => {
+const Header = ({loading}) => {
+  const { userData, getUser } = useUser();
   useEffect(() => {
-    console.log('userData has changed at header:', userData, loading);
+    console.log("header tenta dar get user");
   }, [userData, loading]);
 
   return (

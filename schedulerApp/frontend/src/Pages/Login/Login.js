@@ -5,49 +5,20 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useUser } from './../../UserProvider';
 
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
+const Login = () => {
+    const { userData, getUser, loginUser, registerUser, logoutUser } = useUser();
 
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
-const Login = ({userData, setUserData}) => {
     const [registrationToggle, setRegistrationToggle] = useState(false);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-      const cookies = document.cookie.split('; ').reduce((cookieObject, cookie) => {
-        const [name, value] = cookie.split('=');
-        cookieObject[name] = value;
-        return cookieObject;
-      }, {});
-      
-
-      console.log("Login: ", cookies, cookies.jwt);
-
-      client.get("/api/user", 
-      {
-        withCredentials: true
-      })
-        .then(function (res) {
-          if (res.data && res.data.email) {
-            setUserData(res.data);
-            console.log("logado", res.data);
-          } else {
-            setUserData(res.data);
-          }
-        })
-        .catch(function (error) {
-          setUserData(null);
-        });
+      getUser();
     }, []);
-    
 
     function update_form_btn() {
         if (registrationToggle) {
@@ -61,58 +32,27 @@ const Login = ({userData, setUserData}) => {
 
     function submitRegistration(e) {
         e.preventDefault();
-        client.post(
-        "/api/register",
-        {
-            email: email,
-            username: username,
-            password: password
-        }
-        ).then(function(res) {
-        client.post(
-            "/api/login",
-            {
-            email: email,
-            password: password
-            }
-        ).then(function(res) {
-          console.log(res.data);
-          setUserData(res.data);
-          const token = res.data.jwt
-          document.cookie = `jwt=${token}; path=/`;
-        }).catch(function(error){
-          console.log("Error");
-        });
-        });
+        const userCredentials = {
+          email: email,
+          username: username,
+          password: password,
+        };
+        registerUser(userCredentials);
     }
 
     function submitLogin(e) {
         e.preventDefault();
-        client.post(
-        "/api/login",
-        {
-            email: email,
-            password: password
-        }
-        ).then(function(res) {
-          console.log(res.data);
-          setUserData(res.data);
-          const token = res.data.jwt
-          document.cookie = `jwt=${token}; path=/`;
-        }).catch(function(error){
-          console.log("Error on login.");
-          console.log(error);
-        });
+        const userCredentials = {
+          email: email,
+          password: password,
+        };
+        console.log(userCredentials);
+        loginUser(userCredentials);
     }
 
     function submitLogout(e) {
         e.preventDefault();
-        client.post(
-        "/api/logout",
-        {withCredentials: true}
-        ).then(function(res) {
-          setUserData(null);
-        });
+        logoutUser();
     }
 
   if (userData) {
@@ -143,9 +83,9 @@ const Login = ({userData, setUserData}) => {
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand>Faça seu login</Navbar.Brand>
-        <form onSubmit={e => submitLogout(e)}>
+        {/* <form onSubmit={e => submitLogout(e)}>
                   <Button type="submit" variant="light">Log out</Button>
-                </form>
+                </form> */}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
