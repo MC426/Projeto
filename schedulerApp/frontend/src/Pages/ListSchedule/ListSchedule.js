@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Calendar from 'react-calendar'; // Example calendar library, you can choose the one that fits your needs
-import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import './ListSchedule.css';
+import { useUser } from './../../UserProvider';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -13,7 +13,8 @@ const client = axios.create({
   baseURL: "http://localhost:8000"
 });
 
-const ScheduleList = ({ userData }) => {
+const ScheduleList = () => {
+  const { userData, getUser } = useUser();
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [closestEventDate, setClosestEventDate] = useState(null);
@@ -42,22 +43,16 @@ const ScheduleList = ({ userData }) => {
   };
 
   useEffect(() => {
-    client.get("/api/user", 
-    {
-      withCredentials: true
-    })
-      .then(function (res) {
-        if (res.data && res.data.email) {
-          user_id = res.data.user_id;
-          console.log("conseguiu logar", res.data);
-          console.log("user_id: ", user_id);
-        }
-      })
-      .catch(function (error) {
-        console.log("nao conseguiu o id do usuario");
-      }).finally(function () {
-        fetchSchedules(user_id);
-    });
+    const fetchData = async () => {
+      await getUser();
+      if (userData) {
+        user_id = userData.user_id;
+      }
+      setLoading(false);
+      console.log("user_id: ", user_id);
+     fetchSchedules(user_id);  
+    };
+    fetchData();
   }, []);
 
   const fetchSchedules = (user_id) => {

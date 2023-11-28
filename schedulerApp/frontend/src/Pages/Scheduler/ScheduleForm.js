@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
+import { useUser } from './../../UserProvider';
 import axios from 'axios';
-
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -12,7 +12,8 @@ const client = axios.create({
   baseURL: "http://localhost:8000"
 });
 
-const ScheduleForm = ({userData}) => {
+const ScheduleForm = () => {
+  const { userData, getUser } = useUser();
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [formData, setFormData] = useState({
@@ -21,22 +22,13 @@ const ScheduleForm = ({userData}) => {
   });
 
   var user_id = null;
-  useEffect(() => {
-    client.get("/api/user", 
-    {
-      withCredentials: true
-    })
-      .then(function (res) {
-        if (res.data && res.data.email) {
-          user_id = res.data.user_id;
-          console.log("conseguiu logar", res.data);
-        }
-      })
-      .catch(function (error) {
-        console.log("nao conseguiu o id do usuario");
-      });
+  const getUserId = () => {
+    getUser();
+    if(userData)
+      user_id = userData.user_id;
+    return user_id;
+  };
 
-  }, []);
 
   const handleChange = (name, value) => {
     setFormData({
@@ -51,6 +43,7 @@ const ScheduleForm = ({userData}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here
+    getUserId();
     console.log('Form data submitted:', formData);
     const requestData = {
       start_ts: dateToString(formData.start_time),
