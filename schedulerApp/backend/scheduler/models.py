@@ -1,7 +1,6 @@
 from django.db import models
 from user_api.models import AppUser
 
-# Create your models here.
 class Appointment(models.Model):
     id = models.AutoField(primary_key=True)
     start_ts = models.DateTimeField()

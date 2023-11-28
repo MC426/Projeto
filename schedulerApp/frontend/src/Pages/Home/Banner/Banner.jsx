@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Banner.css';
 import Lottie from 'lottie-react';
 import animationData from './Animations/medical-animation.json';

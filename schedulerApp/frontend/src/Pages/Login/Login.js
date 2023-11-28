@@ -133,13 +133,6 @@ const Login = ({userData, setUserData}) => {
         </Navbar>
           <div className="center">
             <h2>You're logged in!</h2>
-            {/* {(
-              <div>
-                <h2>API Response Data:</h2>
-                <pre>{JSON.stringify(apiData, null, 2)}</pre>
-                <pre> document.cookie </pre>
-              </div>
-            )} */}
           </div>
           
         </div>

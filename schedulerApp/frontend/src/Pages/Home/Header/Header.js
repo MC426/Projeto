@@ -1,13 +1,9 @@
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import logo from '../../../Images/logo ic.png';
 import './Header.css';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom'; // Import useLocation from react-router-dom
+import { useEffect } from 'react';
 
 const Header = ({loading, userData}) => {
   useEffect(() => {
