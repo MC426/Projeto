@@ -129,35 +129,42 @@ class AppointmentValidatorTest(TestCase):
         self.clock_time = datetime(2023,1,1,0,0,0,0,timezone.utc) # 2023-01-01 00:00:00 UTC
         self.validator = AppointmentValidator()
     '''
-    Testes de acordo com classes de equivalencia:
+        Testes de acordo com classe de equivalência:
+        As classes invalidas sao:
+        1. start_ts > end_ts
+        2. start_ts < clock
+        3. end_ts < clock
+        4. start_ts.date() != end_ts.date()
+        5. end_ts - start_ts > 5 hours
+        As classes validas sao:
+        1. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts > 5 hours
     '''
-    # write test using the equivalence classes technique:
     # 1. start_ts > end_ts 
-    def test_validate_1(self):
+    def test_termina_depois_comeco(self):
         with self.assertRaises(ValidationError):
             self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time, self.clock_time)
     
-    # 2. start_ts < end_ts and start_ts < clock
-    def test_validate_2(self):
+    # 2. start_ts < clock
+    def test_comeca_passado(self):
         with self.assertRaises(ValidationError):
             self.validator.validate(self.clock_time - timedelta(hours=1), self.clock_time + timedelta(hours=1), self.clock_time) 
     
-    # 3. start_ts < end_ts and start_ts > clock and end_ts < clock
-    def test_validate_3(self):
+    # 3. end_ts < clock
+    def test_termina_passado(self):
         with self.assertRaises(ValidationError):
             self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time + timedelta(hours=-2), self.clock_time)
     
-    # 4. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() != end_ts.date()
-    def test_validate_4(self):
+    # 4. start_ts.date() != end_ts.date()
+    def test_termina_outra_data(self):
         with self.assertRaises(ValidationError):
             self.validator.validate(self.clock_time + timedelta(hours = 23), self.clock_time + timedelta(hours = 25), self.clock_time)
     
-    # 5. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts > 5 hours
-    def test_validate_5(self):
+    # 5. end_ts - start_ts > 5 hours
+    def test_dura_muito_tempo(self):
         with self.assertRaises(ValidationError):
             self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time + timedelta(hours=7), self.clock_time)
     
     # 6. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts <= 5 hours
-    def test_validate_6(self):
+    def test_classe_valida(self):
         self.validator.validate(self.clock_time + timedelta(hours=5), self.clock_time + timedelta(hours=5), self.clock_time)
     
