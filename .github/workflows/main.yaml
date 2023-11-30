@@ -30,4 +30,5 @@ jobs:
       
       - name: Run Django tests
         run: |
-          python schedulerApp/backend/manage.py test
+          cd schedulerApp/backend
+          python manage.py test
