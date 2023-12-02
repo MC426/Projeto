@@ -47,7 +47,7 @@ class UserViewsTests(TestCase):
 
         # Attempt to retrieve user information after logout
         response_user_view_after_logout = self.client.get(self.user_view_url)
-        self.assertEqual(response_user_view_after_logout.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_user_view_after_logout.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_login_wrong_password (self):
         data = {
@@ -67,7 +67,7 @@ class UserViewsTests(TestCase):
 
     def test_view_no_JWT(self):
         response = self.client.get(self.user_view_url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_registration_without_email(self):
         data = {'password': 'testpass', 'username': 'usuario'}
