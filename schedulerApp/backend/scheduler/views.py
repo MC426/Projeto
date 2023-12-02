@@ -60,3 +60,24 @@ class AppointmentListView(APIView):
 
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ApointmentListInAPeriodView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        # Get query parameters
+        start_ts = request.query_params.get('start_ts')
+        end_ts = request.query_params.get('end_ts')
+        
+
+        if not start_ts or not end_ts:
+            raise ValidationError("Both 'start_ts' and 'end_ts' must be provided.")
+
+        # Filter appointments based on query parameters
+        appointments = Appointment.objects.filter(
+            start_ts__gte=start_ts,
+            end_ts__lte=end_ts
+        )
+
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

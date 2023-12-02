@@ -7,6 +7,7 @@ import Footer from './Pages/Home/Fotter/Footer';
 import Dashboard from './Pages/Profile/Dashboard/Dashboard'
 import ScheduleForm from './Pages/Scheduler/ScheduleForm';
 import ScheduleList from './Pages/ListSchedule/ListSchedule';
+import ListAvailableTimes from './Pages/ListAvailableTimes/ListAvailableTimes';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/profile" element = {<Dashboard  />} />
           <Route path="/agenda" element = {<ScheduleForm />} />
           <Route path="/listar-agenda" element = {<ScheduleList />} />
+          <Route path="escolher-horario" element = {<ListAvailableTimes />} />
         </Routes>
         <Footer/>
       </Router>
