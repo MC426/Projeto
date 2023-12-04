@@ -14,10 +14,10 @@ class AppointmentCreateView(APIView):
         serializer = AppointmentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # check if times are valid
-           # AppointmentValidator().validate(
-           #     serializer.validated_data.get('start_ts'),
-            #    serializer.validated_data.get('end_ts')
-            #)
+            AppointmentValidator().validate(
+               serializer.validated_data.get('start_ts'),
+                serializer.validated_data.get('end_ts')
+            )
             # check for colisions:
             self.perform_custom_validation(serializer.validated_data)
             serializer.save()
