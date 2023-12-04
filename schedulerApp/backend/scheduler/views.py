@@ -5,6 +5,7 @@ from .models import Appointment
 from .serializers import AppointmentSerializer
 from datetime import datetime
 from rest_framework.exceptions import ValidationError
+from .validations import AppointmentValidator
 
 class AppointmentCreateView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -12,6 +13,12 @@ class AppointmentCreateView(APIView):
     def post(self, request):
         serializer = AppointmentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
+            # check if times are valid
+            AppointmentValidator().validate(
+               serializer.validated_data.get('start_ts'),
+                serializer.validated_data.get('end_ts')
+            )
+            # check for colisions:
             self.perform_custom_validation(serializer.validated_data)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
