@@ -5,53 +5,20 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useUser } from './../../UserProvider';
 
-
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
-
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
 
 const Login = () => {
-    const [currentUser, setCurrentUser] = useState(false);
-    const [apiData, setApiData] = useState(null); // State to store the API response data
+    const { userData, getUser, loginUser, registerUser, logoutUser } = useUser();
+
     const [registrationToggle, setRegistrationToggle] = useState(false);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-      const cookies = document.cookie.split('; ').reduce((cookieObject, cookie) => {
-        const [name, value] = cookie.split('=');
-        cookieObject[name] = value;
-        return cookieObject;
-      }, {});
-      
-
-      console.log("Login: ", cookies, cookies.jwt);
-
-      client.get("/api/user", 
-      {
-        withCredentials: true
-      })
-        .then(function (res) {
-          if (res.data && res.data.email) {
-            setCurrentUser(true);
-            setApiData(res.data);
-            console.log("logado", res.data);
-          } else {
-            setCurrentUser(false);
-            setApiData(res.data);
-          }
-        })
-        .catch(function (error) {
-          setCurrentUser(false);
-        });
+      getUser();
     }, []);
-    
 
     function update_form_btn() {
         if (registrationToggle) {
@@ -65,60 +32,30 @@ const Login = () => {
 
     function submitRegistration(e) {
         e.preventDefault();
-        client.post(
-        "/api/register",
-        {
-            email: email,
-            username: username,
-            password: password
-        }
-        ).then(function(res) {
-        client.post(
-            "/api/login",
-            {
-            email: email,
-            password: password
-            }
-        ).then(function(res) {
-          setCurrentUser(true);
-          setApiData(res.data);
-          const token = res.data.jwt
-          document.cookie = `jwt=${token}; path=/`;
-        }).catch(function(error){
-          console.log("Error");
-        });
-        });
+        const userCredentials = {
+          email: email,
+          username: username,
+          password: password,
+        };
+        registerUser(userCredentials);
     }
 
     function submitLogin(e) {
         e.preventDefault();
-        client.post(
-        "/api/login",
-        {
-            email: email,
-            password: password
-        }
-        ).then(function(res) {
-          setCurrentUser(true);
-          setApiData(res.data);
-          const token = res.data.jwt
-          document.cookie = `jwt=${token}; path=/`;
-        }).catch(function(error){
-          console.log("Error");
-        });
+        const userCredentials = {
+          email: email,
+          password: password,
+        };
+        console.log(userCredentials);
+        loginUser(userCredentials);
     }
 
     function submitLogout(e) {
         e.preventDefault();
-        client.post(
-        "/api/logout",
-        {withCredentials: true}
-        ).then(function(res) {
-        setCurrentUser(false);
-        });
+        logoutUser();
     }
 
-  if (currentUser) {
+  if (userData) {
     return (
       <div>
         <Navbar bg="dark" variant="dark">
@@ -136,13 +73,6 @@ const Login = () => {
         </Navbar>
           <div className="center">
             <h2>You're logged in!</h2>
-            {/* {(
-              <div>
-                <h2>API Response Data:</h2>
-                <pre>{JSON.stringify(apiData, null, 2)}</pre>
-                <pre> document.cookie </pre>
-              </div>
-            )} */}
           </div>
           
         </div>
@@ -153,6 +83,9 @@ const Login = () => {
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand>Faça seu login</Navbar.Brand>
+        {/* <form onSubmit={e => submitLogout(e)}>
+                  <Button type="submit" variant="light">Log out</Button>
+                </form> */}
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>

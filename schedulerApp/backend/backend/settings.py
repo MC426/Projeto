@@ -124,7 +124,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
@@ -157,3 +157,4 @@ SESSION_COOKIE_SECURE = False  # In production, set to True
 #SESSION_COOKIE_NAME = 'eng_software_app'
 
 CSRF_COOKIE_SECURE = False # In production set to True
+CSRF_COOKIE_SAMESITE = 'None'

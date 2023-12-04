@@ -1,54 +1,25 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-
-
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
-
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
+import { useEffect } from 'react';
+import { useUser } from './../../../UserProvider';
 
 const Dashboard = () => {
-    const [userData, setUserData] = useState(null);
+  const { userData, getUser, logoutUser } = useUser();
 
-
-
-    useEffect(() => {
-      const cookies = document.cookie;
-
-      client.get("/api/user", 
-      {
-        withCredentials: true
-      })
-        .then(function (res) {
-          if (res.data && res.data.email) {
-            setUserData(res.data);
-          } else {
-            setUserData(null);
-          }
-        })
-        .catch(function (error) {
-          setUserData(null);
-        });
-    }, []);
-    
+  useEffect(() => {
+    getUser();
+  }, []); 
+  
   function submitLogout(e) {
-        e.preventDefault();
-        client.post(
-        "/api/logout",
-        {withCredentials: true}
-        ).then(function(res) {
-            setUserData(null);
-        });
-    }
+    e.preventDefault();
+    console.log("dashboard tenta dar logout");
+    logoutUser();
+    console.log(userData);
+  }
 
   return (
     <div>
-          {userData && userData.email ?
+          {userData ?
     (<>
     <div className="container mt-5">
       <div className="row">
@@ -81,8 +52,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div></>)
-    : (<div> Please login first 
-        <pre>{JSON.stringify(userData, null, 2)}</pre>
+    : (<div> <h1>Por favor faça login primeiro</h1> 
     </div>)}
     </div>
   );

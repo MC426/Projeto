@@ -5,20 +5,24 @@ import Login from './Pages/Login/Login'
 import Header from './Pages/Home/Header/Header'
 import Footer from './Pages/Home/Fotter/Footer';
 import Dashboard from './Pages/Profile/Dashboard/Dashboard'
+import ScheduleForm from './Pages/Scheduler/ScheduleForm';
+import ScheduleList from './Pages/ListSchedule/ListSchedule';
 
 function App() {
-  return (
-    <Router>
-      <Header/>
-      <Routes>
-        <Route path="/" element = {<Home />} />
-        <Route path="/home" element = {<Home />} />
-        <Route path="/login" element = {<Login />} />
-        <Route path="/profile" element = {<Dashboard />} />
-      </Routes>
-      <Footer/>
-    </Router>
 
+  return (
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element = {<Home />} />
+          <Route path="/home" element = {<Home  />} />
+          <Route path="/login" element = {<Login />} />
+          <Route path="/profile" element = {<Dashboard  />} />
+          <Route path="/agenda" element = {<ScheduleForm />} />
+          <Route path="/listar-agenda" element = {<ScheduleList />} />
+        </Routes>
+        <Footer/>
+      </Router>
   );
 }
 
