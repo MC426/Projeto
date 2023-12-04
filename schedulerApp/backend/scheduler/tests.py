@@ -18,7 +18,7 @@ class AppointmentTests(TestCase):
         AppUser.objects.create(email='medico1@a.com', password='teste')
         AppUser.objects.create(email='teste@a.com', password='teste')
         self.client = APIClient()
-        self.clock_time = datetime(2023, 1, 1)
+        self.clock_time = datetime(2200, 1, 1)
         self.url_create = reverse('create')
         self.url_list = reverse('list')
         
