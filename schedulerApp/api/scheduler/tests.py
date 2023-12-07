@@ -5,8 +5,11 @@ from rest_framework.test import APIClient
 from datetime import datetime, timedelta
 from .models import Appointment, Room, RoomReservation
 from user_api.models import AppUser
+from .models import Appointment, Room, RoomReservation
+from user_api.models import AppUser
 from .serializers import AppointmentSerializer
 from user_api.models import AppUser
+from .validations import ScheduleValidator
 from .validations import ScheduleValidator
 from rest_framework.exceptions import ValidationError
 from datetime import datetime, timedelta, timezone
@@ -129,12 +132,14 @@ class AppointmentValidatorTest(TestCase):
     def setUp(self):
         self.clock_time = datetime(2023,1,1,0,0,0,0,timezone.utc) # 2023-01-01 00:00:00 UTC
         self.validator = ScheduleValidator()
+        self.validator = ScheduleValidator()
     '''
         Testes de acordo com classe de equivalência:
         As classes invalidas sao:
         1. start_ts > end_ts
         2. start_ts < clock
         3. end_ts < clock
+        4. end_ts - start_ts > 5 hours
         4. end_ts - start_ts > 5 hours
         As classes validas sao:
         1. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts > 5 hours
