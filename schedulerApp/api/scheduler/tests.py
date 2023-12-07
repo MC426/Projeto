@@ -6,6 +6,10 @@ from datetime import datetime, timedelta
 from .models import Appointment
 from .serializers import AppointmentSerializer
 from user_api.models import AppUser
+from .validations import AppointmentValidator
+from rest_framework.exceptions import ValidationError
+from datetime import datetime, timedelta, timezone
+
 
 class AppointmentTests(TestCase):
     def setUp(self):
@@ -14,7 +18,7 @@ class AppointmentTests(TestCase):
         AppUser.objects.create(email='medico1@a.com', password='teste')
         AppUser.objects.create(email='teste@a.com', password='teste')
         self.client = APIClient()
-        self.clock_time = datetime(2023, 1, 1)
+        self.clock_time = datetime(2200, 1, 1)
         self.url_create = reverse('create')
         self.url_list = reverse('list')
         
@@ -119,3 +123,48 @@ class AppointmentTests(TestCase):
         self.create_appointment_test(self.clock_time, self.clock_time + timedelta(hours = 1))
         response = self.create_appointment_test(self.clock_time, self.clock_time + timedelta(hours=1))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class AppointmentValidatorTest(TestCase):
+    def setUp(self):
+        self.clock_time = datetime(2023,1,1,0,0,0,0,timezone.utc) # 2023-01-01 00:00:00 UTC
+        self.validator = AppointmentValidator()
+    '''
+        Testes de acordo com classe de equivalência:
+        As classes invalidas sao:
+        1. start_ts > end_ts
+        2. start_ts < clock
+        3. end_ts < clock
+        4. start_ts.date() != end_ts.date()
+        5. end_ts - start_ts > 5 hours
+        As classes validas sao:
+        1. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts > 5 hours
+    '''
+    # 1. start_ts > end_ts 
+    def test_termina_depois_comeco(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time, self.clock_time)
+    
+    # 2. start_ts < clock
+    def test_comeca_passado(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate(self.clock_time - timedelta(hours=1), self.clock_time + timedelta(hours=1), self.clock_time) 
+    
+    # 3. end_ts < clock
+    def test_termina_passado(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time + timedelta(hours=-2), self.clock_time)
+    
+    # 4. start_ts.date() != end_ts.date()
+    def test_termina_outra_data(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate(self.clock_time + timedelta(hours = 23), self.clock_time + timedelta(hours = 25), self.clock_time)
+    
+    # 5. end_ts - start_ts > 5 hours
+    def test_dura_muito_tempo(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time + timedelta(hours=7), self.clock_time)
+    
+    # 6. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts <= 5 hours
+    def test_classe_valida(self):
+        self.validator.validate(self.clock_time + timedelta(hours=5), self.clock_time + timedelta(hours=5), self.clock_time)
+    

@@ -22,7 +22,7 @@ const Header = ({loading}) => {
                         <Nav className="ms-auto align-items-center">
                             <Link to="/home" className='list-item text-decoration-none'>Home</Link>
                             <Link to="/about" className='list-item text-decoration-none'>Sobre</Link>
-                            <Link to="/service" className='list-item text-decoration-none'>Serviços</Link>
+                            <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher um horario</Link>
                             <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
                             <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
                             {
