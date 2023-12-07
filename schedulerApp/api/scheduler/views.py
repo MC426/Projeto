@@ -1,11 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from .models import Appointment
-from .serializers import AppointmentSerializer, RoomSerializer
+from .models import Appointment, Room, RoomReservation
+from .serializers import AppointmentSerializer, RoomReservationSerializer, RoomSerializer
 from datetime import datetime
 from rest_framework.exceptions import ValidationError
-from .validations import AppointmentValidator
+from .validations import ScheduleValidator
 
 class AppointmentCreateView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -14,7 +14,7 @@ class AppointmentCreateView(APIView):
         serializer = AppointmentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # check if times are valid
-            AppointmentValidator().validate(
+            ScheduleValidator().validate_appointment(
                serializer.validated_data.get('start_ts'),
                 serializer.validated_data.get('end_ts')
             )
@@ -89,7 +89,7 @@ class ApointmentListInAPeriodView(APIView):
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-class RoomCreateView(APIView):
+class RoomManageView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
@@ -97,3 +97,67 @@ class RoomCreateView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    def delete(self, request):
+        room_id = request.data.get('id')
+        if not room_id:
+            raise ValidationError("Room id must be provided.")
+        room = Room.objects.get(id=room_id)
+        room.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def put(self, request):
+        room_id = request.data.get('id')
+        if not room_id:
+            raise ValidationError("Room id must be provided.")
+        room = Room.objects.get(id=room_id)
+        serializer = RoomSerializer(room, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    def get(self, request):
+        rooms = Room.objects.all()
+        serializer = RoomSerializer(rooms, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class RoomReservationManageView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+
+        serializer = RoomReservationSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            
+            # check if times are valid
+            ScheduleValidator().validate_room_reservation(
+               serializer.validated_data.get('start_ts'),
+                serializer.validated_data.get('end_ts')
+            )
+
+            room = serializer.validated_data.get('room')
+            room = Room.objects.get(id=room.id)
+
+            # check for colisions:
+            self.check_colisions(serializer.validated_data, room)
+            
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def check_colisions(self, validated_data, room):
+
+        start_ts = validated_data.get('start_ts')
+        end_ts = validated_data.get('end_ts')
+
+        if room and start_ts and end_ts:
+            overlapping_appointments = RoomReservation.objects.filter(
+                room=room,
+                start_ts__lt=end_ts,
+                end_ts__gt=start_ts
+            )
+
+            if overlapping_appointments.exists():
+                raise ValidationError('Room already has another schedule overlapping with the proposed times.')

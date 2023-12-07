@@ -3,10 +3,11 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 from datetime import datetime, timedelta
-from .models import Appointment
+from .models import Appointment, Room, RoomReservation
+from user_api.models import AppUser
 from .serializers import AppointmentSerializer
 from user_api.models import AppUser
-from .validations import AppointmentValidator
+from .validations import ScheduleValidator
 from rest_framework.exceptions import ValidationError
 from datetime import datetime, timedelta, timezone
 
@@ -127,15 +128,14 @@ class AppointmentTests(TestCase):
 class AppointmentValidatorTest(TestCase):
     def setUp(self):
         self.clock_time = datetime(2023,1,1,0,0,0,0,timezone.utc) # 2023-01-01 00:00:00 UTC
-        self.validator = AppointmentValidator()
+        self.validator = ScheduleValidator()
     '''
         Testes de acordo com classe de equivalência:
         As classes invalidas sao:
         1. start_ts > end_ts
         2. start_ts < clock
         3. end_ts < clock
-        4. start_ts.date() != end_ts.date()
-        5. end_ts - start_ts > 5 hours
+        4. end_ts - start_ts > 5 hours
         As classes validas sao:
         1. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts > 5 hours
     '''
@@ -153,18 +153,207 @@ class AppointmentValidatorTest(TestCase):
     def test_termina_passado(self):
         with self.assertRaises(ValidationError):
             self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time + timedelta(hours=-2), self.clock_time)
-    
-    # 4. start_ts.date() != end_ts.date()
-    def test_termina_outra_data(self):
-        with self.assertRaises(ValidationError):
-            self.validator.validate(self.clock_time + timedelta(hours = 23), self.clock_time + timedelta(hours = 25), self.clock_time)
-    
-    # 5. end_ts - start_ts > 5 hours
+
+    # 4. end_ts - start_ts > 5 hours
     def test_dura_muito_tempo(self):
         with self.assertRaises(ValidationError):
             self.validator.validate(self.clock_time + timedelta(hours=1), self.clock_time + timedelta(hours=7), self.clock_time)
     
-    # 6. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts <= 5 hours
+    # 5. start_ts < end_ts and start_ts > clock and end_ts > clock and start_ts.date() == end_ts.date() and end_ts - start_ts <= 5 hours
     def test_classe_valida(self):
         self.validator.validate(self.clock_time + timedelta(hours=5), self.clock_time + timedelta(hours=5), self.clock_time)
     
+class RoomTests(TestCase):
+    
+    def setUp(self):
+        self.room = Room.objects.create(name='Sala Teste')
+        self.client = APIClient()
+        self.url = reverse('manage-rooms')
+        
+    def test_create_room(self):
+
+        data = {
+            'name': 'Sala Teste 2'
+        }
+
+        try:
+            response = self.client.post(self.url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            created_room = Room.objects.get(name='Sala Teste 2')
+            self.assertEqual(created_room.name, 'Sala Teste 2')
+        finally:
+            created_room = Room.objects.filter(name='Sala Teste 2')
+            if created_room:
+                created_room.delete()
+
+    def test_update_room(self):
+
+        data = {
+            'id': self.room.id,
+            'name': 'Sala Teste atualizada'
+        }
+
+        response = self.client.put(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Room.objects.get(id=self.room.id).name, 'Sala Teste atualizada')
+    
+    def test_list_rooms(self):
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_room(self):
+
+        data = {
+            'id': self.room.id,
+        }
+        response = self.client.delete(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        deleted_room = Room.objects.filter(id=self.room.id)
+        self.assertFalse(deleted_room)
+
+    def tearDown(self):
+        if Room.objects.filter(id=self.room.id):
+            self.room.delete()
+
+class RoomReservationTests(TestCase):
+
+    '''Realizaremos testes de acordo com análise de valor limite.
+    Como a função de validação de grande parte de start_ts e end_ts é a mesma
+    usada para o agendamento de consultas, que já possui testes escritos considerando as classes
+    de equivalência, testaremos apenas as particularidades do código de agendamento de salas.
+
+    Os valores limite são:
+
+    1. end_ts - start_ts = 24 horas (válida)
+    2. end_ts - start_ts = 24 horas + 1 minuto (inválida)
+    3. start_ts_outra_consulta = end_ts (válida)
+    4. start_ts_outra_consulta = end_ts - 1 minuto (inválida)
+    5. start_ts = end_outra_consulta (válida)
+    6. start_ts = end_outra_consulta - 1 minuto (inválida)
+
+    '''
+
+    def setUp(self):
+        self.room = Room.objects.create(name='Sala Teste')
+        self.medico = AppUser.objects.create(email='teste@teste.com', username='medico', is_staff=False)
+        self.client = APIClient()
+        self.reservation = RoomReservation.objects.create(
+            room=self.room,
+            start_ts=datetime(2028,1,2,0,0,0,0,timezone.utc),
+            end_ts=datetime(2028,1,2,5,0,0,0,timezone.utc),
+            medico=self.medico
+        )
+        self.reservation.save()
+        self.url = reverse('manage-room-reservations')
+    
+    def test_limit_1(self):
+            
+        data = {
+            'room': self.room.id,
+            'start_ts': datetime(2028,1,5,0,0,0,0,timezone.utc),
+            'end_ts': datetime(2028,1,6,0,0,0,0,timezone.utc),
+            'medico': self.medico.user_id
+        }
+    
+        try:
+            response = self.client.post(self.url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        finally:
+            created_reservation = RoomReservation.objects.filter(start_ts=datetime(2028,1,5,0,0,0,0,timezone.utc))
+            if created_reservation:
+                created_reservation.delete()
+    
+    def test_limit_2(self):
+                
+        data = {
+            'room': self.room.id,
+            'start_ts': datetime(2028,1,10,0,0,0,0,timezone.utc),
+            'end_ts': datetime(2028,1,11,0,1,0,0,timezone.utc),
+            'medico': self.medico.user_id
+        }
+        
+        try:
+            response = self.client.post(self.url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        finally:
+            created_reservation = RoomReservation.objects.filter(start_ts=datetime(2028,1,10,0,0,0,0,timezone.utc))
+            if created_reservation:
+                created_reservation.delete()
+
+    def test_limit_3(self):
+
+        #Termina quando a self.reservation começa
+        data = {
+            'room': self.room.id,
+            'start_ts': datetime(2028,1,1,22,0,0,0,timezone.utc),
+            'end_ts': datetime(2028,1,2,0,0,0,0,timezone.utc),
+            'medico': self.medico.user_id
+        }
+
+        try:
+            response = self.client.post(self.url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        finally:
+            created_reservation = RoomReservation.objects.filter(start_ts=datetime(2028,1,1,22,0,0,0,timezone.utc))
+            if created_reservation:
+                created_reservation.delete()
+
+    def test_limit_4(self):
+
+        #Termina 1 minuto depois da self.reservation começar
+        data = {
+            'room': self.room.id,
+            'start_ts': datetime(2028,1,1,22,0,0,0,timezone.utc),
+            'end_ts': datetime(2028,1,2,0,1,0,0,timezone.utc),
+            'medico': self.medico.user_id
+        }
+
+        try:
+            response = self.client.post(self.url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        finally:
+            created_reservation = RoomReservation.objects.filter(start_ts=datetime(2028,1,1,22,0,0,0,timezone.utc))
+            if created_reservation:
+                created_reservation.delete()
+
+    def test_limit_5(self):
+
+        #Começa quando a self.reservation termina
+        data = {
+            'room': self.room.id,
+            'start_ts': datetime(2028,1,2,5,0,0,0,timezone.utc),
+            'end_ts': datetime(2028,1,2,6,0,0,0,timezone.utc),
+            'medico': self.medico.user_id
+        }
+
+        try:
+            response = self.client.post(self.url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        finally:
+            created_reservation = RoomReservation.objects.filter(start_ts=datetime(2028,1,1,5,0,0,0,timezone.utc))
+            if created_reservation:
+                created_reservation.delete()
+
+    def test_limit_6(self):
+
+        #Começa 1 minuto antes da self.reservation terminar
+        data = {
+            'room': self.room.id,
+            'start_ts': datetime(2028,1,2,4,59,0,0,timezone.utc),
+            'end_ts': datetime(2028,1,2,6,0,0,0,timezone.utc),
+            'medico': self.medico.user_id
+        }
+
+        try:
+            response = self.client.post(self.url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        finally:
+            created_reservation = RoomReservation.objects.filter(start_ts=datetime(2028,1,1,4,59,0,0,timezone.utc))
+            if created_reservation:
+                created_reservation.delete()
+
+    def tearDown(self):
+        self.reservation.delete()
+        self.medico.delete()
+        self.room.delete()
