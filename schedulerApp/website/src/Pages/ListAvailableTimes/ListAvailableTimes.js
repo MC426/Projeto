@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import './ListAvailableTimes.css';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -73,30 +74,32 @@ const ListAvailableTimes = () => {
 
 
   return (
-    <div>
-      <h1>Scheduler App</h1>
+    <div style={{ margin : '2%'}}>
+      <h1>Consultar Horários</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Start Date:
+        <div className = "Dates">
+          <strong>Data de Inicio:    </strong>    
           <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-        </label>
-        <label>
-          End Date:
+        </div>
+
+        <div className = "Dates">
+          <strong>Data de Término:    </strong>    
           <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-        </label>
-        <button type="submit">Submit</button>
+        </div>
+        <button type="submit">Consultar</button>
       </form>
       {formSubmitted && (
-        <div>
-          <h2>Appointments:</h2>
-          <div>
+        <div style = {{marginTop :'5vh'}}>
+          <h2>Consultas:</h2>
+          <div style = {{ marginTop :'2vh'}}>
             {appointments.map((appointment) => (
               <button
                 key={appointment.id}
                 onClick={() => handleAppointmentButtonClick(appointment)}
-                style={{ display: 'block', margin: '5px', padding: '10px' }}
+                style = {{  margin: '1.5vh', padding: '1.5vh',}}
               >
-                {"Horario: " + formatDate(appointment.start_ts) + " ate " + formatDate(appointment.end_ts)}
+                <strong>{"Horario: "}</strong>
+                {formatDate(appointment.start_ts)} até {formatDate(appointment.end_ts)}
               </button>
             ))}
           </div>
