@@ -21,14 +21,13 @@ const Header = ({loading}) => {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto align-items-center">
                             <Link to="/home" className='list-item text-decoration-none'>Home</Link>
-                            <Link to="/about" className='list-item text-decoration-none'>Sobre</Link>
-                            <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher um horario</Link>
+                            <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
                             <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
                             <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
                             {
                             userData
                             ?
-                            <Link to="/profile" type="button" className="btn btn-danger">Profile</Link>
+                            <Link to="/profile" type="button" className="btn btn-danger">Perfil</Link>
                             :
                             <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }

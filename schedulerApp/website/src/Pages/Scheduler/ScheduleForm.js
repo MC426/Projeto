@@ -70,14 +70,14 @@ const ScheduleForm = () => {
   };
 
   return (
-    <div>
-      <h2>Crie um horario de Agendamento</h2>
+    <div style = {{margin: '2%'}}>
+      <h2><strong>Crie um horario de Agendamento</strong></h2>
       {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Inicio:</label>
+        <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
+          <label >Inicio:</label>
           <Datetime
             dateFormat="YYYY-MM-DD"
             timeFormat="HH:mm:ss"
@@ -85,7 +85,7 @@ const ScheduleForm = () => {
             value={formData.start_time}
           />
         </div>
-        <div>
+        <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
           <label>Fim:</label>
           <Datetime
             dateFormat="YYYY-MM-DD"

@@ -78,10 +78,10 @@ const ScheduleList = () => {
     };
 
     return (
-        <div>
-          <h2>List of Schedules</h2>
+        <div style={{ margin : '2%'}}>
+          <h2>Lista de Agendas</h2>
           {loading ? (
-            <p>Loading schedules...</p>
+            <p>Carregando agendas...</p>
           ) : (
             <>
               <ul>
@@ -94,7 +94,7 @@ const ScheduleList = () => {
                 ))}
               </ul>
               {/* Example: Display schedules in a calendar */}
-              <div style={{ marginTop: '20px' }}>
+              <div >
                 <Calendar
                 value={closestEventDate}
                 tileContent={tileContent}
