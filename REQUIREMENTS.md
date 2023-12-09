@@ -2,7 +2,7 @@ Para iniciar a elicitação de requisitos, primeiramente utilizamos da entrevist
 
 # Entrevistas
 
-O obejtivo das entrevistas foi apenas fazer um mapeamento sobre a rotina de um médico, como são feitos os agendamentos, como os pacientes são direcionados, etc. e entender quais são as principais dificuldades que ele enfrenta no dia a dia. A partir disso, foi possível identificar alguns requisitos que podem ser implementados no sistema. Os principais estão ligados a burocracia dos sistemas utilizados, da curva de aprendizado da tecnologia.
+O objetivo das entrevistas foi apenas fazer um mapeamento sobre a rotina de um médico, como são feitos os agendamentos, como os pacientes são direcionados, etc. e entender quais são as principais dificuldades que ele enfrenta no dia a dia. A partir disso, foi possível identificar alguns requisitos que podem ser implementados no sistema. Os principais estão ligados a burocracia dos sistemas utilizados, da curva de aprendizado da tecnologia.
 
 Outro ponto levantado foi a disponibilização de dados de pacientes como por exemplo laudos de exames, porém não será possível implementar, pois demandaria muito esforço para entrar nos conformes da LGPD.
 
