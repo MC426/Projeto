@@ -20,7 +20,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
-          pip install -r schedulerApp/api/requeriments.txt
+          pip install -r schedulerApp/api/requiriments.txt
           pip install backend/
 
       - name: Run tests
