@@ -53,7 +53,7 @@ const ScheduleForm = () => {
     console.log(requestData);
 
     client.post(
-      "/api/scheduler/create",
+      "/api/scheduler/create-appointment",
       requestData,
       {withCredentials: true},
     ).then(function(res) {
