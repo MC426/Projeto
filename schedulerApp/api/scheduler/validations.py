@@ -34,3 +34,16 @@ class PasswordValidator:
             raise ValidationError('Password must have a number')
         
         return True
+    
+class PasswordValidator:
+    def validate(self, password):
+        if (not any(char.isupper() for char in password)):
+            raise ValidationError('Password must have an uppercase character')
+        
+        if (len(password) < 8):
+            raise ValidationError('Password must have at least 8 characters')
+        
+        if (not any(char.isdigit() for char in password)):
+            raise ValidationError('Password must have a number')
+        
+        return True
