@@ -9,8 +9,7 @@ from .models import Appointment, Room, RoomReservation
 from user_api.models import AppUser
 from .serializers import AppointmentSerializer
 from user_api.models import AppUser
-from .validations import ScheduleValidator
-from .validations import ScheduleValidator
+from .validations import ScheduleValidator, PasswordValidator
 from rest_framework.exceptions import ValidationError
 from datetime import datetime, timedelta, timezone
 
@@ -362,3 +361,35 @@ class RoomReservationTests(TestCase):
         self.reservation.delete()
         self.medico.delete()
         self.room.delete()
+
+class PasswordTest(TestCase):
+    def setUp(self):
+        self.validator = PasswordValidator()
+    '''
+        Testes de acordo com classe de equivalência:
+        As classes invalidas sao:
+        1. nao tem letra maiuscula
+        2. < 8 caracteres
+        3. nao tem numero
+        As classes validas sao:
+        1. Tem letra maiuscula and >= 8 caracteres and tem numero
+    '''
+    # 1. nao tem letra maiuscula
+    def test_no_upper(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('naimshaikhzadeh12')
+    
+    # 2. < 8 caracteres
+    def test_small(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('Bruno00') 
+    
+    # 3. nao tem numero
+    def test_no_number(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('LuizHenriqueYujiDelgadoOda')
+    
+    # 4. Tem letra maiuscula and >= 8 caracteres and tem numero
+    def test_valid(self):
+        self.validator.validate('AndreasCisiRamos2003')
+    
