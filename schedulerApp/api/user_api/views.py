@@ -23,7 +23,7 @@ class UserRegister(APIView):
 
 class UserLogin(APIView):
 	permission_classes = (permissions.AllowAny,)
-	authentication_classes = (SessionAuthentication,)
+	#authentication_classes = (SessionAuthentication,) Dava problema quando esse endpoint era chamado pelo front
 	##
 	def post(self, request):
 		data = request.data
