@@ -26,9 +26,21 @@ const Header = ({loading}) => {
                             userData
                             ?
                             <>
+                                
+
+                                {/* Fazer um condicional para se o perfil for do médico ou paciente  */}
+                                
+                                {/* PACIENTE*/ }
                                 <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
-                                <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
+                                <Link to="/listar-agenda-paciente" className='list-item text-decoration-none'>Agenda Paciente</Link>
+                                
+
+                                {/*MEDICO */}
+                                <Link to="/listar-agenda-medico" className='list-item text-decoration-none'>Agenda Médica</Link>
                                 <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
+
+
+
                                 <Link to="/profile" type="button" className="btn btn-danger">Perfil</Link>
                             </>
                             :

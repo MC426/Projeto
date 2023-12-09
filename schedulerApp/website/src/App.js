@@ -6,7 +6,8 @@ import Header from './Pages/Home/Header/Header';
 import Footer from './Pages/Home/Footer/Footer';
 import Dashboard from './Pages/Profile/Dashboard/Dashboard';
 import ScheduleForm from './Pages/Scheduler/ScheduleForm';
-import ScheduleList from './Pages/ListSchedule/ListSchedule';
+import DoctorScheduleList from './Pages/ListSchedule/ListScheduleDoctor.js';
+import PatientScheduleList from './Pages/ListSchedule/ListSchedulePatient.js';
 import ListAvailableTimes from './Pages/ListAvailableTimes/ListAvailableTimes';
 import PrivateRoute from './PrivateRoute'; // Importe o componente PrivateRoute aqui
 
@@ -34,10 +35,18 @@ function App() {
           } 
         />
         <Route 
-          path="/listar-agenda" 
+          path="/listar-agenda-medico" 
           element={
             <PrivateRoute>
-              <ScheduleList />
+              <DoctorScheduleList />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/listar-agenda-paciente" 
+          element={
+            <PrivateRoute>
+              <PatientScheduleList />
             </PrivateRoute>
           } 
         />
