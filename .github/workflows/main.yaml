@@ -24,7 +24,7 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m unittest discover -s schedulerApp/api/
+          python -m unittest discover -s schedulerApp/api/checkers_tarefa_2/
       
       - name: Run Django tests
         run: |
