@@ -81,32 +81,39 @@ const ScheduleList = () => {
 
     return (
       <div style={{ margin: '2%' }}>
-      <h2>Lista dos horários reservados para consultas</h2>
-      {loading ? (
-        <p>Carregando agendas...</p>
-      ) : (
-        <>
-          <ul>
-            {schedules
-              .slice() // Cria uma cópia do array para não modificar o original
-              .sort((a, b) => a.start_ts - b.start_ts) // Ordena as consultas por data crescente
-              .map((schedule, index) => (
-                <li key={schedule.id}>
-                  <strong>Consulta {index + 1}:</strong> {new Date(schedule.start_ts).toLocaleString()} até{' '}
-                  {new Date(schedule.end_ts).toLocaleString()}
-                  {/* Add additional schedule details as needed */}
-                </li>
-              ))}
-          </ul>
-          {/* Example: Display schedules in a calendar */}
-          <div>
-            <Calendar value={closestEventDate} tileContent={tileContent} />
-            {/* Configure calendar settings based on your library's documentation */}
-            {/* Example: events={schedules.map(schedule => new Date(schedule.start_ts))} */}
-          </div>
-        </>
-      )}
-    </div>
+        <h2><strong>Seus Agendamentos:</strong></h2>
+        {loading ? (
+          <p>Carregando agendas...</p>
+        ) : (
+          <>
+            {schedules.length > 0 ? (
+              <>
+                <ul>
+                  {schedules
+                    .slice() // Cria uma cópia do array para não modificar o original
+                    .sort((a, b) => a.start_ts - b.start_ts) // Ordena as consultas por data crescente
+                    .map((schedule, index) => (
+                      <li key={schedule.id}>
+                        <strong>Consulta {index + 1}:</strong> {new Date(schedule.start_ts).toLocaleString()} até{' '}
+                        {new Date(schedule.end_ts).toLocaleString()}
+                        {/* Add additional schedule details as needed */}
+                      </li>
+                    ))}
+                </ul>
+                {/* Example: Display schedules in a calendar */}
+                <div>
+                  <Calendar value={closestEventDate} tileContent={tileContent} />
+                  {/* Configure calendar settings based on your library's documentation */}
+                  {/* Example: events={schedules.map(schedule => new Date(schedule.start_ts))} */}
+                </div>
+              </>
+            ) : (
+              <p style = {{fontSize : '20px'}}>Nenhum agendamento criado.</p>
+            )}
+          </>
+        )}
+      </div>
+    
       );
     
 };

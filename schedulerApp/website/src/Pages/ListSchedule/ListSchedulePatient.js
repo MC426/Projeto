@@ -63,7 +63,7 @@ const ScheduleList = () => {
             console.log(user_id);
 
             client.get("/api/scheduler/list", { withCredentials: true,
-                params: { medico_id: user_id }
+                params: { paciente_id: user_id }
             })
             .then(response => {
                 setSchedules(response.data);
@@ -81,32 +81,39 @@ const ScheduleList = () => {
 
     return (
       <div style={{ margin: '2%' }}>
-      <h2>Lista das suas consultas marcadas</h2>
-      {loading ? (
-        <p>Carregando agendas...</p>
-      ) : (
-        <>
-          <ul>
-            {schedules
-              .slice() // Cria uma cópia do array para não modificar o original
-              .sort((a, b) => a.start_ts - b.start_ts) // Ordena as consultas por data crescente
-              .map((schedule, index) => (
-                <li key={schedule.id}>
-                  <strong>Consulta {index + 1}:</strong> {new Date(schedule.start_ts).toLocaleString()} até{' '}
-                  {new Date(schedule.end_ts).toLocaleString()}
-                  {/* Add additional schedule details as needed */}
-                </li>
-              ))}
-          </ul>
-          {/* Example: Display schedules in a calendar */}
-          <div>
-            <Calendar value={closestEventDate} tileContent={tileContent} />
-            {/* Configure calendar settings based on your library's documentation */}
-            {/* Example: events={schedules.map(schedule => new Date(schedule.start_ts))} */}
-          </div>
-        </>
-      )}
-    </div>
+        <h2><strong>Suas Consultas:</strong></h2>
+        {loading ? (
+          <p>Carregando agendas...</p>
+        ) : (
+          <>
+            {schedules.length > 0 ? (
+              <>
+                <ul>
+                  {schedules
+                    .slice() // Cria uma cópia do array para não modificar o original
+                    .sort((a, b) => a.start_ts - b.start_ts) // Ordena as consultas por data crescente
+                    .map((schedule, index) => (
+                      <li key={schedule.id}>
+                        <strong>Consulta {index + 1}:</strong> {new Date(schedule.start_ts).toLocaleString()} até{' '}
+                        {new Date(schedule.end_ts).toLocaleString()}
+                        {/* Add additional schedule details as needed */}
+                      </li>
+                    ))}
+                </ul>
+                {/* Example: Display schedules in a calendar */}
+                <div>
+                  <Calendar value={closestEventDate} tileContent={tileContent} />
+                  {/* Configure calendar settings based on your library's documentation */}
+                  {/* Example: events={schedules.map(schedule => new Date(schedule.start_ts))} */}
+                </div>
+              </>
+            ) : (
+              <p style = {{fontSize : '20px'}}>Nenhuma consulta marcada.</p>
+            )}
+          </>
+        )}
+      </div>
+
       );
     
 };
