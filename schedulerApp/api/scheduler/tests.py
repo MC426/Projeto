@@ -21,6 +21,14 @@ class AppointmentTests(TestCase):
         self.clock_time = datetime(2200, 1, 1)
         self.url_create = reverse('create')
         self.url_list = reverse('list')
+
+    '''
+        Testes de acordo com analise de valor limite
+        queremos ver se as reservas de salas dos medicos funcionam
+        - operacoes CRUD
+        - duracao de uma reserva de sala (<= 24 horas)
+        - conflito de horario entre reservas de sala
+    '''
         
     def create_appointment(self, start_ts, end_ts, medico, paciente):
         data_schedule = {
