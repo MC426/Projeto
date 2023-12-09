@@ -20,14 +20,17 @@ const Header = ({loading}) => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" expand="lg"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto align-items-center">
-                            <Link to="/home" className='list-item text-decoration-none'>Home</Link>
-                            <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
-                            <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
-                            <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
+
+                            <Link to="/" className='list-item text-decoration-none'>Home</Link>
                             {
                             userData
                             ?
-                            <Link to="/profile" type="button" className="btn btn-danger">Perfil</Link>
+                            <>
+                                <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
+                                <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
+                                <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
+                                <Link to="/profile" type="button" className="btn btn-danger">Perfil</Link>
+                            </>
                             :
                             <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }
