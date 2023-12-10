@@ -89,3 +89,11 @@ class UserView(APIView):
 		user = AppUser.objects.filter(user_id = payload['user_id']).first()
 		serializer = UserSerializer(user)
 		return Response(serializer.data, status=status.HTTP_200_OK)
+	
+class UserId(APIView):
+	permission_classes = (permissions.AllowAny,)
+	def get(self, request):
+		user_idt = request.query_params['id']
+		user = AppUser.objects.filter(user_id = user_idt).first()
+		serializer = UserSerializer(user)
+		return Response(serializer.data, status=status.HTTP_200_OK)
