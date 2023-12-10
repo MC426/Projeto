@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
-import { useUser } from './../../UserProvider';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import './ListAvailableTimes.css';
+import './RoomReservation.css';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -15,7 +14,6 @@ const client = axios.create({
 
 // todo: realmente fazer uma chamada para o backend para criar o agendamento
 const ListAvailableTimes = () => {
-  const { userData, getUser, getUserById } = useUser();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [appointments, setAppointments] = useState([]);
@@ -33,25 +31,14 @@ const ListAvailableTimes = () => {
       return new Date(dateString).toLocaleString('pt-BR', options);
     };
 
-  var user_id = null;
-  const getUserId = () => {
-    getUser();
-    if(userData)
-      user_id = userData.user_id;
-    return user_id;
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const newEndDate = new Date(endDate);
-    newEndDate.setDate(newEndDate.getDate() + 1);
-
     const fetchAppointments = async () => {
         try {
           const response = await 
           client.get("/api/scheduler/list-in-period", { withCredentials: true,
-              params: { start_ts: startDate, end_ts: newEndDate }
+              params: { start_ts: startDate, end_ts: endDate }
           }).then(response => {
               setAppointments(response.data);
               console.log("Consegui os dados: ", response.data);
@@ -67,41 +54,22 @@ const ListAvailableTimes = () => {
     fetchAppointments();
     setFormSubmitted(true);
   };
-  
-  const handleAppointmentButtonClick = async (appointment) => 
-  {
-    getUserId();
 
-    try {
-    const res = await getUserById(appointment.medico);
-    const nome_medico = res.data.username;
-    console.log(nome_medico)
+  const handleAppointmentButtonClick = (appointment) => {
     confirmAlert({
       title: 'Appointment Details',
       message: `Horario: ${formatDate(appointment.start_ts)} até ${formatDate(appointment.end_ts)}.\n`
-        + `Medico: ${nome_medico}.\n`
+        + `Medico: ${appointment.user_id}.\n`
         + `Localizacao: Rua Joaquim Joao 123.`
         ,
       buttons: [
         {
-          label: 'Voltar',
-          onClick: () => console.log('User clicked to return'),
-        },
-        {
-          label: 'Confirmar agendamento',
+          label: 'OK',
           // todo: realmente fazer uma chamada para o backend para criar o agendamento
-          onClick: () => client.get("/api/scheduler/reserve-appointment", { withCredentials: true, params: { appointment_id: appointment.id , paciente_id: user_id }}
-          ).then(response =>{
-            console.log("Foi possível reservar horário: ", response.data);
-          }).catch(error => {
-            console.error("Error reserving appointment:", error);
-          })
+          onClick: () => console.log('User clicked OK'),
         },
       ],
     });
-    } catch (error) {
-      console.error("Error getting name:", error);
-    }
   };
 
 

@@ -47,7 +47,7 @@ export const UserProvider = ({children}) => {
           console.log(res.status);
           console.log("cheguei aqui: ", res.data);
             if (res.status == 200) {
-                console.log("conseguiu logar", res.data);
+                console.log("conseguiu logar", res.data.is_doctor);
                 updateUserData(res.data);
             }
         })
@@ -94,9 +94,18 @@ export const UserProvider = ({children}) => {
             });
         });
     }
+
+    function getUserById(id) {
+      return client.get(
+        "/api/user-id",
+        {
+          params: {id: id}
+        }
+      )
+    }
     
     return (
-        <UserContext.Provider value={{ userData, getUser, loginUser, registerUser, logoutUser }}>
+        <UserContext.Provider value={{ userData, getUser, loginUser, registerUser, logoutUser, getUserById }}>
           {children}
         </UserContext.Provider>
       );
