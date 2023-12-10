@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -23,20 +24,21 @@ const Header = ({loading}) => {
                         <Nav className="ms-auto align-items-center">
 
                             <Link to="/" className='list-item text-decoration-none'>Home</Link>
-                            {
-                            userData
-                            ?
-                            <>
-                                <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
-                                <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
-                                <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
-                            </>
-                            :
-                            <></>
-                            }
+                        
                             {
                             userData && userData.is_doctor ?
-                            <Link to="/reserva-salas" className='list-item text-decoration-none'>Reserva de salas</Link>
+                            <> 
+                                
+                                <Link to="/listar-agenda-medico" className='list-item text-decoration-none'>Agenda Médica</Link>
+                                <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
+                                <Link to="/reserva-salas" className='list-item text-decoration-none'>Reserva de salas</Link>
+                            </>
+                            : userData && !userData.is_doctor ?
+                            <> 
+                                <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
+                                <Link to="/listar-agenda-paciente" className='list-item text-decoration-none'>Agenda Paciente</Link>
+                            
+                            </>
                             :
                             <></>
                             }
