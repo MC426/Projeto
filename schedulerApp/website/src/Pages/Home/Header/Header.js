@@ -7,8 +7,9 @@ import { useEffect } from 'react';
 import { useUser } from './../../../UserProvider';
 
 const Header = ({loading}) => {
-  const { userData, getUser } = useUser();
-  useEffect(() => {
+    const { userData, getUser, loginUser, registerUser, logoutUser } = useUser();
+
+    useEffect(() => {
     console.log("header tenta dar get user");
   }, [userData, loading]);
 
@@ -29,8 +30,20 @@ const Header = ({loading}) => {
                                 <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
                                 <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
                                 <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
-                                <Link to="/profile" type="button" className="btn btn-danger">Perfil</Link>
                             </>
+                            :
+                            <></>
+                            }
+                            {
+                            userData && userData.is_doctor ?
+                            <Link to="/reserva-salas" className='list-item text-decoration-none'>Reserva de salas</Link>
+                            :
+                            <></>
+                            }
+                            {
+                            userData
+                            ?
+                            <Link to="/profile" type="button" className="btn btn-danger">Perfil</Link>
                             :
                             <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }

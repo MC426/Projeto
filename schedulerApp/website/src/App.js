@@ -8,7 +8,8 @@ import Dashboard from './Pages/Profile/Dashboard/Dashboard';
 import ScheduleForm from './Pages/Scheduler/ScheduleForm';
 import ScheduleList from './Pages/ListSchedule/ListSchedule';
 import ListAvailableTimes from './Pages/ListAvailableTimes/ListAvailableTimes';
-import PrivateRoute from './PrivateRoute'; // Importe o componente PrivateRoute aqui
+import PrivateRoute from './PrivateRoute';
+import RoomReservation from './Pages/RoomReservation/RoomReservation';
 
 function App() {
   return (
@@ -32,6 +33,14 @@ function App() {
               <ScheduleForm />
             </PrivateRoute>
           } 
+        />
+        <Route
+          path="/reserva-salas"
+          element={
+            <PrivateRoute>
+              <RoomReservation />
+            </PrivateRoute>
+          }
         />
         <Route 
           path="/listar-agenda" 
