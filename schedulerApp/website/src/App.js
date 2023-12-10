@@ -10,6 +10,7 @@ import DoctorScheduleList from './Pages/ListSchedule/ListScheduleDoctor.js';
 import PatientScheduleList from './Pages/ListSchedule/ListSchedulePatient.js';
 import ListAvailableTimes from './Pages/ListAvailableTimes/ListAvailableTimes';
 import PrivateRoute from './PrivateRoute'; // Importe o componente PrivateRoute aqui
+import RoomReservation from './Pages/RoomReservation/RoomReservation';
 
 function App() {
   return (
@@ -33,6 +34,14 @@ function App() {
               <ScheduleForm />
             </PrivateRoute>
           } 
+        />
+        <Route
+          path="/reserva-salas"
+          element={
+            <PrivateRoute>
+              <RoomReservation />
+            </PrivateRoute>
+          }
         />
         <Route 
           path="/listar-agenda-medico" 
