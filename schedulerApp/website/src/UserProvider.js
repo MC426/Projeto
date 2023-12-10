@@ -94,9 +94,18 @@ export const UserProvider = ({children}) => {
             });
         });
     }
+
+    function getUserById(id) {
+      return client.get(
+        "/api/user-id",
+        {
+          params: {id: id}
+        }
+      )
+    }
     
     return (
-        <UserContext.Provider value={{ userData, getUser, loginUser, registerUser, logoutUser }}>
+        <UserContext.Provider value={{ userData, getUser, loginUser, registerUser, logoutUser, getUserById }}>
           {children}
         </UserContext.Provider>
       );

@@ -68,7 +68,7 @@ class AppointmentListView(APIView):
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class ApointmentListInAPeriodView(APIView):
+class AppointmentListInAPeriodView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def get(self, request):
@@ -83,12 +83,34 @@ class ApointmentListInAPeriodView(APIView):
         # Filter appointments based on query parameters
         appointments = Appointment.objects.filter(
             start_ts__gte=start_ts,
-            end_ts__lte=end_ts
+            end_ts__lte=end_ts,
+            paciente__isnull=True,
         )
 
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+class AppointmentReservation(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        # Get query parameters
+        appointment_id = request.query_params['appointment_id']
+        paciente_id = request.query_params['paciente_id']
+        
+        if not appointment_id or not paciente_id:
+            raise ValidationError("Both 'appointment_id' and 'paciente_id' must be provided.")
+        
+        appointment = Appointment.objects.get(id=appointment_id)
+        if appointment.paciente is not None:
+            raise ValidationError("Appointment already reserved by another patient.")
+        
+        Appointment.objects.filter(id=appointment_id).update(paciente=paciente_id)
+        serializer = AppointmentSerializer(appointment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
 class RoomManageView(APIView):
     permission_classes = (permissions.AllowAny,)
 
