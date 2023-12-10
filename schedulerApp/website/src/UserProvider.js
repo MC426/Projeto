@@ -47,7 +47,7 @@ export const UserProvider = ({children}) => {
           console.log(res.status);
           console.log("cheguei aqui: ", res.data);
             if (res.status == 200) {
-                console.log("conseguiu logar", res.data);
+                console.log("conseguiu logar", res.data.is_doctor);
                 updateUserData(res.data);
             }
         })
