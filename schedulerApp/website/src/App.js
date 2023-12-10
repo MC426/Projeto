@@ -6,10 +6,10 @@ import Header from './Pages/Home/Header/Header';
 import Footer from './Pages/Home/Footer/Footer';
 import Dashboard from './Pages/Profile/Dashboard/Dashboard';
 import ScheduleForm from './Pages/Scheduler/ScheduleForm';
-import ScheduleList from './Pages/ListSchedule/ListSchedule';
+import DoctorScheduleList from './Pages/ListSchedule/ListScheduleDoctor.js';
+import PatientScheduleList from './Pages/ListSchedule/ListSchedulePatient.js';
 import ListAvailableTimes from './Pages/ListAvailableTimes/ListAvailableTimes';
-import PrivateRoute from './PrivateRoute';
-import RoomReservation from './Pages/RoomReservation/RoomReservation';
+import PrivateRoute from './PrivateRoute'; // Importe o componente PrivateRoute aqui
 
 function App() {
   return (
@@ -34,19 +34,19 @@ function App() {
             </PrivateRoute>
           } 
         />
-        <Route
-          path="/reserva-salas"
+        <Route 
+          path="/listar-agenda-medico" 
           element={
             <PrivateRoute>
-              <RoomReservation />
+              <DoctorScheduleList />
             </PrivateRoute>
-          }
+          } 
         />
         <Route 
-          path="/listar-agenda" 
+          path="/listar-agenda-paciente" 
           element={
             <PrivateRoute>
-              <ScheduleList />
+              <PatientScheduleList />
             </PrivateRoute>
           } 
         />
