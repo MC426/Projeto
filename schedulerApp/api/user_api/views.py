@@ -27,6 +27,7 @@ class UserLogin(APIView):
 	##
 	def post(self, request):
 		data = request.data
+		print(data)
 		assert validate_email(data)
 		assert validate_password(data)
 		email = request.data['email']
@@ -54,7 +55,8 @@ class UserLogin(APIView):
 			response = Response()
 			response.set_cookie(key='jwt', value=token, httponly=True)
 			response.data = {
-				'jwt': token
+				'jwt': token,
+				'is_doctor': user.is_doctor
 			}
 			return response
 
