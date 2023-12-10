@@ -15,7 +15,7 @@ const client = axios.create({
 
 // todo: realmente fazer uma chamada para o backend para criar o agendamento
 const ListAvailableTimes = () => {
-  const { userData, getUser } = useUser();
+  const { userData, getUser, getUserById } = useUser();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [appointments, setAppointments] = useState([]);
@@ -68,13 +68,18 @@ const ListAvailableTimes = () => {
     setFormSubmitted(true);
   };
   
-  const handleAppointmentButtonClick = (appointment) => 
+  const handleAppointmentButtonClick = async (appointment) => 
   {
     getUserId();
+
+    try {
+    const res = await getUserById(appointment.medico);
+    const nome_medico = res.data.username;
+    console.log(nome_medico)
     confirmAlert({
       title: 'Appointment Details',
       message: `Horario: ${formatDate(appointment.start_ts)} até ${formatDate(appointment.end_ts)}.\n`
-        + `Medico: ${appointment.medico}.\n`
+        + `Medico: ${nome_medico}.\n`
         + `Localizacao: Rua Joaquim Joao 123.`
         ,
       buttons: [
@@ -94,6 +99,9 @@ const ListAvailableTimes = () => {
         },
       ],
     });
+    } catch (error) {
+      console.error("Error getting name:", error);
+    }
   };
 
 
