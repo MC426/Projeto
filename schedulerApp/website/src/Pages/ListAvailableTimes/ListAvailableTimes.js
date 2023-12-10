@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
+import { useUser } from './../../UserProvider';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './ListAvailableTimes.css';
 
@@ -14,6 +15,7 @@ const client = axios.create({
 
 // todo: realmente fazer uma chamada para o backend para criar o agendamento
 const ListAvailableTimes = () => {
+  const { userData, getUser } = useUser();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [appointments, setAppointments] = useState([]);
@@ -31,14 +33,25 @@ const ListAvailableTimes = () => {
       return new Date(dateString).toLocaleString('pt-BR', options);
     };
 
+  var user_id = null;
+  const getUserId = () => {
+    getUser();
+    if(userData)
+      user_id = userData.user_id;
+    return user_id;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newEndDate = new Date(endDate);
+    newEndDate.setDate(newEndDate.getDate() + 1);
+
     const fetchAppointments = async () => {
         try {
           const response = await 
           client.get("/api/scheduler/list-in-period", { withCredentials: true,
-              params: { start_ts: startDate, end_ts: endDate }
+              params: { start_ts: startDate, end_ts: newEndDate }
           }).then(response => {
               setAppointments(response.data);
               console.log("Consegui os dados: ", response.data);
@@ -54,19 +67,30 @@ const ListAvailableTimes = () => {
     fetchAppointments();
     setFormSubmitted(true);
   };
-
-  const handleAppointmentButtonClick = (appointment) => {
+  
+  const handleAppointmentButtonClick = (appointment) => 
+  {
+    getUserId();
     confirmAlert({
       title: 'Appointment Details',
       message: `Horario: ${formatDate(appointment.start_ts)} até ${formatDate(appointment.end_ts)}.\n`
-        + `Medico: ${appointment.user_id}.\n`
+        + `Medico: ${appointment.medico}.\n`
         + `Localizacao: Rua Joaquim Joao 123.`
         ,
       buttons: [
         {
-          label: 'OK',
+          label: 'Voltar',
+          onClick: () => console.log('User clicked to return'),
+        },
+        {
+          label: 'Confirmar agendamento',
           // todo: realmente fazer uma chamada para o backend para criar o agendamento
-          onClick: () => console.log('User clicked OK'),
+          onClick: () => client.get("/api/scheduler/reserve-appointment", { withCredentials: true, params: { appointment_id: appointment.id , paciente_id: user_id }}
+          ).then(response =>{
+            console.log("Foi possível reservar horário: ", response.data);
+          }).catch(error => {
+            console.error("Error reserving appointment:", error);
+          })
         },
       ],
     });
