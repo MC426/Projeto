@@ -82,7 +82,7 @@ const ScheduleForm = () => {
 
   return (
     <div style = {{margin: '2%'}}>
-      <h2><strong>Crie um horario de consulta</strong></h2>
+      <h2><strong>Crie uma consulta de 1 hora</strong></h2>
       {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       
@@ -97,32 +97,14 @@ const ScheduleForm = () => {
           />
         </div>
         <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
-          <label>Horario:</label>
+          <label>Horário de início:</label>
           <Datetime
             dateFormat={false}
-            timeFormat="HH"
+            timeFormat="HH:00"
             onChange={(value) => handleChange(value)}
             value={formData.start_time}
           />
         </div>
-        {/* <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
-          <label>Dia:</label>
-          <Datetime
-            dateFormat='YYYY:MM:DD'
-            timeFormat={false}
-            onChange={(value) => handleChange(value)}
-            value={formData.end_time}
-          />
-        </div>
-        <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
-          <label>Horario:</label>
-          <Datetime
-            dateFormat={false}
-            timeFormat="HH"
-            onChange={(value) => handleChange(value)}
-            value={formData.end_time}
-          />
-        </div> */}
         <div>
           <button type="submit">Enviar</button>
         </div>
