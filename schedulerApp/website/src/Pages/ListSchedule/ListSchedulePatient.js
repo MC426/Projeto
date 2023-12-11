@@ -3,7 +3,8 @@ import axios from 'axios';
 import Calendar from 'react-calendar'; // Example calendar library, you can choose the one that fits your needs
 import 'react-datetime/css/react-datetime.css';
 import './ListSchedule.css';
-import { useUser } from '../../UserProvider';
+import { useUser } from '../../backendFacade';
+import { confirmAlert } from 'react-confirm-alert';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -14,7 +15,7 @@ const client = axios.create({
 });
 
 const ScheduleList = () => {
-  const { userData, getUser } = useUser();
+  const { userData, getUser, getUserById } = useUser();
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [closestEventDate, setClosestEventDate] = useState(null);
@@ -43,6 +44,40 @@ const ScheduleList = () => {
     return null;
   };
   
+  const handleAppointmentButtonClick = async (appointment) => 
+  {
+
+    try {
+    const res = await getUserById(appointment.medico);
+    const nome_medico = res.data.username;
+    console.log(nome_medico)
+    confirmAlert({
+      title: 'Appointment Details',
+      message: `Horario: ${new Date(appointment.start_ts).toLocaleString()} até ${new Date(appointment.end_ts).toLocaleString()}.\n`
+        + `Medico: ${nome_medico}.\n`
+        + `Localizacao: Rua Joaquim Joao 123.`
+        ,
+      buttons: [
+        {
+          label: 'Voltar',
+          onClick: () => console.log('User clicked to return'),
+        },
+        {
+          label: 'Cancelar agendamento',
+          // todo: realmente fazer uma chamada para o backend para criar o agendamento
+          onClick: () => client.get("/api/scheduler/cancel-patient", { withCredentials: true, params: { appointment_id: appointment.id }}
+          ).then(response =>{
+            console.log("Foi possível cancelar consulta: ", response.data);
+          }).catch(error => {
+            console.error("Error cancelling appointment:", error);
+          })
+        },
+      ],
+    });
+    } catch (error) {
+      console.error("Error getting name:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,6 +131,11 @@ const ScheduleList = () => {
                       <li key={schedule.id}>
                         <strong>Consulta {index + 1}:</strong> {new Date(schedule.start_ts).toLocaleString()} até{' '}
                         {new Date(schedule.end_ts).toLocaleString()}
+                        <button
+                        key={schedule.id}
+                        onClick={() => handleAppointmentButtonClick(schedule)}
+                        style = {{  margin: '1.5vh',}}
+                        >Cancelar</button>
                         {/* Add additional schedule details as needed */}
                       </li>
                     ))}

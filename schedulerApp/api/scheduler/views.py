@@ -109,6 +109,40 @@ class AppointmentReservation(APIView):
         serializer = AppointmentSerializer(appointment)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class AppointmentCancelling(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        # Get query parameters
+        appointment_id = request.query_params['appointment_id']
+        
+        if not appointment_id:
+            raise ValidationError("'appointment_id' must be provided.")
+        
+        appointment = Appointment.objects.get(id=appointment_id)
+        if appointment.paciente is None:
+            raise ValidationError("Appointment not reserved by patient.")
+        
+        Appointment.objects.filter(id=appointment_id).update(paciente=None)
+        serializer = AppointmentSerializer(appointment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AppointmentDelete(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        # Get query parameters
+        appointment_id = request.query_params['appointment_id']
+        
+        if not appointment_id:
+            raise ValidationError("'appointment_id' must be provided.")
+        
+        appointment = Appointment.objects.get(id=appointment_id)
+
+        Appointment.objects.filter(id=appointment_id).delete()
+        serializer = AppointmentSerializer(appointment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class RoomManageView(APIView):
     permission_classes = (permissions.AllowAny,)
 
