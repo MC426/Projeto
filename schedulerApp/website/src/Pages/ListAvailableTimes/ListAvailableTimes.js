@@ -28,7 +28,6 @@ const ListAvailableTimes = () => {
         year: 'numeric',
         hour: 'numeric',
         minute: 'numeric',
-        timeZone: 'UTC', // Deixa esse timezone porque eh o usado em todo lugar
       };
       return new Date(dateString).toLocaleString('pt-BR', options);
     };
