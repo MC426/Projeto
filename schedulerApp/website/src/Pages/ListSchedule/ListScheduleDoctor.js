@@ -37,7 +37,11 @@ const ScheduleList = () => {
       const hasEvent = schedules.some(schedule => {
         const scheduleStart = new Date(schedule.start_ts);
         const scheduleEnd = new Date(schedule.end_ts);
-        return dateWithoutTime >= scheduleStart && dateWithoutTime <= scheduleEnd;
+        const newScheduleStart = new Date();
+        const newScheduleEnd = new Date();
+        newScheduleStart.setDate(scheduleStart.getDate() - 1);
+        newScheduleEnd.setDate(scheduleEnd.getDate() - 1);
+        return (dateWithoutTime <= scheduleStart && newScheduleStart < dateWithoutTime) || (dateWithoutTime <= scheduleEnd && newScheduleEnd < dateWithoutTime);
       });
       return hasEvent ? <div className="event-day-marker"></div> : null;
     }
