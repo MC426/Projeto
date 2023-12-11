@@ -57,7 +57,7 @@ const RoomReservation = () => {
   return (
     <div style={{ margin : '2%'}}>
       <h1>Suas reservas</h1>
-      <div style={{ margin : '2%'}}>
+      <div >
         <ul>
           {reservations.length == 0 ?
           <p>Você ainda não possui reservas. As reservas que realizar com o formulário abaixo aparecerão aqui.</p>
