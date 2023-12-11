@@ -105,8 +105,6 @@ export const BackendFacade = ({children}) => {
     }
 
     function createRoomReservation(roomId, startTime, endTime) {
-      console.log('user id: ', userData.user_id)
-      console.log('room id: ', roomId)
       return client.post(
         "/api/scheduler/manage-room-reservations",
         {
@@ -117,10 +115,35 @@ export const BackendFacade = ({children}) => {
         }
       )
     }
-    
+
+    function getRoomReservations(medicoId) {
+      return client.get(
+        "/api/scheduler/manage-room-reservations",
+        {
+          params: {medico: medicoId}
+        }
+      )  
+    }
+
+    function deleteReservation(id) {
+      return client.delete(
+        "/api/scheduler/manage-room-reservations",
+        {
+          params: {id: id}
+        }
+      )
+    }
+
+    function getRooms() {
+      return client.get(
+        "/api/scheduler/manage-rooms"
+      )
+    }
+
     return (
         <UserContext.Provider value={{userData, getUser, loginUser, registerUser, logoutUser,
-        getUserById, createRoomReservation}}>
+        getUserById, createRoomReservation, getRoomReservations, deleteReservation, getRooms,
+        deleteReservation}}>
           {children}
         </UserContext.Provider>
       );

@@ -56,7 +56,8 @@ class UserLogin(APIView):
 			response.set_cookie(key='jwt', value=token, httponly=True)
 			response.data = {
 				'jwt': token,
-				'is_doctor': user.is_doctor
+				'is_doctor': user.is_doctor,
+				'user_id': user.user_id
 			}
 			return response
 
