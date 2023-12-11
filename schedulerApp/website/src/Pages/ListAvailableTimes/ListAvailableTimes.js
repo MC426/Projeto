@@ -4,6 +4,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { useUser } from '../../backendFacade';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './ListAvailableTimes.css';
+import '../Middle.css'
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -105,7 +106,7 @@ const ListAvailableTimes = () => {
 
 
   return (
-    <div style={{ margin : '2%'}}>
+    <div className = 'middle' style={{ margin : '2%'}}>
       <h1>Consultar Horários</h1>
       <form onSubmit={handleSubmit}>
         <div className = "Dates">

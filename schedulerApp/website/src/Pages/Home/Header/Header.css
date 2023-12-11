@@ -6,11 +6,18 @@
     transition: all .5s ease-in-out;
     padding: 0 30px;
     margin-top: 25px;
+    height: 10vh;
 }
 
 .head-bg {
-    background-color: #004caa;
+    background-color: #ce1b76;
 }
+
+.logo-image {
+    width: 100%;
+    max-width: 80px; /* Ajuste conforme necessário */
+    height: auto;
+  }
 
 .list-item {
     padding: 25px;

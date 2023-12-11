@@ -4,6 +4,8 @@ import Calendar from 'react-calendar'; // Example calendar library, you can choo
 import 'react-datetime/css/react-datetime.css';
 import './ListSchedule.css';
 import { useUser } from '../../backendFacade';
+import { confirmAlert } from 'react-confirm-alert';
+import '../Middle.css'
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -14,7 +16,7 @@ const client = axios.create({
 });
 
 const ScheduleList = () => {
-  const { userData, getUser } = useUser();
+  const { userData, getUser, getUserById } = useUser();
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [closestEventDate, setClosestEventDate] = useState(null);
@@ -36,13 +38,57 @@ const ScheduleList = () => {
       const hasEvent = schedules.some(schedule => {
         const scheduleStart = new Date(schedule.start_ts);
         const scheduleEnd = new Date(schedule.end_ts);
-        return dateWithoutTime >= scheduleStart && dateWithoutTime <= scheduleEnd;
+        const newScheduleStart = new Date();
+        const newScheduleEnd = new Date();
+        newScheduleStart.setDate(scheduleStart.getDate() - 1);
+        newScheduleEnd.setDate(scheduleEnd.getDate() - 1);
+        return (dateWithoutTime <= scheduleStart && newScheduleStart < dateWithoutTime) || (dateWithoutTime <= scheduleEnd && newScheduleEnd < dateWithoutTime);
       });
       return hasEvent ? <div className="event-day-marker"></div> : null;
     }
     return null;
   };
   
+  const handleAppointmentButtonClick = async (appointment) => 
+  {
+
+    try {
+    var nome_paciente = null;
+    if (appointment.paciente == null) {
+      nome_paciente = "Sem paciente";
+    }
+    else {
+      const res = await getUserById(appointment.paciente);
+      nome_paciente = res.data.username;
+    }
+    console.log(nome_paciente)
+    confirmAlert({
+      title: 'Appointment Details',
+      message: `Horario: ${new Date(appointment.start_ts).toLocaleString()} até ${new Date(appointment.end_ts).toLocaleString()}.\n`
+        + `Paciente: ${nome_paciente}.\n`
+        + `Localizacao: Rua Joaquim Joao 123.`
+        ,
+      buttons: [
+        {
+          label: 'Voltar',
+          onClick: () => console.log('User clicked to return'),
+        },
+        {
+          label: 'Cancelar agendamento',
+          // todo: realmente fazer uma chamada para o backend para criar o agendamento
+          onClick: () => client.get("/api/scheduler/cancel-medico", { withCredentials: true, params: { appointment_id: appointment.id }}
+          ).then(response =>{
+            console.log("Foi possível cancelar consulta: ", response.data);
+          }).catch(error => {
+            console.error("Error cancelling appointment:", error);
+          })
+        },
+      ],
+    });
+    } catch (error) {
+      console.error("Error getting name:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +126,7 @@ const ScheduleList = () => {
     };
 
     return (
-      <div style={{ margin: '2%' }}>
+      <div className = 'middle' style={{ margin: '2%' }}>
         <h2><strong>Seus Agendamentos:</strong></h2>
         {loading ? (
           <p>Carregando agendas...</p>
@@ -96,6 +142,11 @@ const ScheduleList = () => {
                       <li key={schedule.id}>
                         <strong>Consulta {index + 1}:</strong> {new Date(schedule.start_ts).toLocaleString()} até{' '}
                         {new Date(schedule.end_ts).toLocaleString()}
+                        <button
+                        key={schedule.id}
+                        onClick={() => handleAppointmentButtonClick(schedule)}
+                        style = {{  margin: '1.5vh',}}
+                        >Cancelar</button>
                         {/* Add additional schedule details as needed */}
                       </li>
                     ))}

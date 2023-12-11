@@ -8,4 +8,6 @@ urlpatterns = [
     path('manage-rooms', views.RoomManageView.as_view(), name='manage-rooms'),
     path('manage-room-reservations', views.RoomReservationManageView.as_view(), name='manage-room-reservations'),
     path('reserve-appointment',views.AppointmentReservation.as_view(), name='reserve-appointment'),
+    path('cancel-patient', views.AppointmentCancelling.as_view(), name='cancel-patient'),
+    path('cancel-medico', views.AppointmentDelete.as_view(), name='cancel-medico'),
 ]

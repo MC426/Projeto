@@ -3,6 +3,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './RoomReservation.css';
 import { useUser } from '../../backendFacade';
+import '../Middle.css'
 
 const RoomReservation = () => {
   const [startDate, setStartDate] = useState('');
@@ -55,9 +56,9 @@ const RoomReservation = () => {
   }
 
   return (
-    <div style={{ margin : '2%'}}>
+    <div className = 'middle' style={{ margin : '2%'}}>
       <h1>Suas reservas</h1>
-      <div style={{ margin : '2%'}}>
+      <div >
         <ul>
           {reservations.length == 0 ?
           <p>Você ainda não possui reservas. As reservas que realizar com o formulário abaixo aparecerão aqui.</p>
