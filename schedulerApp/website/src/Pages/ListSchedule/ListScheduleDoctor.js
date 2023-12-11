@@ -5,6 +5,7 @@ import 'react-datetime/css/react-datetime.css';
 import './ListSchedule.css';
 import { useUser } from '../../backendFacade';
 import { confirmAlert } from 'react-confirm-alert';
+import '../Middle.css'
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -125,7 +126,7 @@ const ScheduleList = () => {
     };
 
     return (
-      <div style={{ margin: '2%' }}>
+      <div className = 'middle' style={{ margin: '2%' }}>
         <h2><strong>Seus Agendamentos:</strong></h2>
         {loading ? (
           <p>Carregando agendas...</p>

@@ -3,6 +3,7 @@ import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { useUser } from '../../backendFacade';
 import axios from 'axios';
+import '../Middle.css'
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -81,7 +82,7 @@ const ScheduleForm = () => {
   };
 
   return (
-    <div style = {{margin: '2%'}}>
+    <div className = 'middle' style = {{margin: '2%'}}>
       <h2><strong>Crie uma consulta de 1 hora</strong></h2>
       {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
