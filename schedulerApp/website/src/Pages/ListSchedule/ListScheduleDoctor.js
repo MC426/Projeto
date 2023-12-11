@@ -48,8 +48,14 @@ const ScheduleList = () => {
   {
 
     try {
-    const res = await getUserById(appointment.paciente);
-    const nome_paciente = res.data.username;
+    var nome_paciente = null;
+    if (appointment.paciente == null) {
+      nome_paciente = "Sem paciente";
+    }
+    else {
+      const res = await getUserById(appointment.paciente);
+      nome_paciente = res.data.username;
+    }
     console.log(nome_paciente)
     confirmAlert({
       title: 'Appointment Details',
