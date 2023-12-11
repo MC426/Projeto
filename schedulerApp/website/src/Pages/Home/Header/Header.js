@@ -2,7 +2,7 @@
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import logo from '../../../Images/logo ic.png';
+import logo from '../../../Images/logo-without-copyrights.jpg';
 import './Header.css';
 import { useEffect } from 'react';
 import { useUser } from '../../../backendFacade';
@@ -18,7 +18,7 @@ const Header = ({loading}) => {
         <div className="head-bg">
             <Navbar className="navbar" collapseOnSelect expand="lg">
                 <Container className="container-head">
-                    <Navbar.Brand href="/home"><img src={logo} alt="logo" /></Navbar.Brand>
+                <Navbar.Brand href="/home"><img src={logo} alt="logo" className="logo-image" /></Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" expand="lg"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto align-items-center">

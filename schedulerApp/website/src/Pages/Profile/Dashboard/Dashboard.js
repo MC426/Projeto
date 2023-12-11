@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useUser } from '../../../backendFacade';
+import '../../Middle.css'
+
 
 const Dashboard = () => {
   const { userData, getUser, logoutUser } = useUser();
@@ -18,7 +20,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
+    <div className = 'middle' >
           {userData ?
     (<>
     <div className="container mt-5">

@@ -7,8 +7,10 @@ const Banner = () => {
   return (
     <div className = "banner">
         <div class="text-container">
-            <h1>Projeto MC426</h1>
-            <h2>Esse é um projeto feito por alunos da UNICAMP para a matéria de engenharia de Software.</h2>
+            <h1 style = {{fontSize : '10vh'}}><strong>Agenda+</strong></h1>
+            <h2>Agende suas consultas na palma mão</h2>
+            <h5>Para médicos, gerencie seus horários, salas e pacientes.</h5>
+            <h5>Para pacientes, escolha horários e médicos disponíveis. </h5>
         </div>
         <div className="lottie-container">
           <Lottie animationData={animationData}/>

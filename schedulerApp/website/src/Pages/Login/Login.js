@@ -58,10 +58,10 @@ const Login = () => {
 
   if (userData) {
     return (
-      <div>
-        <Navbar bg="dark" variant="dark">
+      <div >
+        <Navbar bg="dark" variant="dark" style = {{height :'10vh'}}>
           <Container>
-            <Navbar.Brand>Você esta loggado</Navbar.Brand>
+            <Navbar.Brand >Você esta loggado</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">
               <Navbar.Text>
@@ -72,7 +72,7 @@ const Login = () => {
             </Navbar.Collapse>
           </Container>
         </Navbar>
-          <div className="center" style={{textAlign :'center'}}>
+          <div className="center" >
             <h2>Seu login foi bem sucedido !</h2>
           </div>
           
@@ -83,7 +83,7 @@ const Login = () => {
     <div>
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand>Faça seu login</Navbar.Brand>
+        <Navbar.Brand style = {{height :'10vh'}}>Faça seu login</Navbar.Brand>
         {/* <form onSubmit={e => submitLogout(e)}>
                   <Button type="submit" variant="light">Log out</Button>
                 </form> */}
@@ -103,7 +103,7 @@ const Login = () => {
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
               <Form.Text className="text-muted">
-                Nós não iremos compartilhar seu e-mail com ninguém.
+                Não iremos compartilhar seu e-mail com ninguém.
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicUsername">
@@ -126,7 +126,7 @@ const Login = () => {
               <Form.Label>Email </Form.Label>
               <Form.Control type="email" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
               <Form.Text className="text-muted">
-              Nós não iremos compartilhar seu e-mail com ninguém.
+              Não iremos compartilhar seu e-mail com ninguém.
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
