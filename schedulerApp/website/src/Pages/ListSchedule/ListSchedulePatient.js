@@ -3,7 +3,7 @@ import axios from 'axios';
 import Calendar from 'react-calendar'; // Example calendar library, you can choose the one that fits your needs
 import 'react-datetime/css/react-datetime.css';
 import './ListSchedule.css';
-import { useUser } from '../../UserProvider';
+import { useUser } from '../../backendFacade';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
