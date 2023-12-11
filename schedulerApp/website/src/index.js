@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { UserProvider } from './UserProvider';
+import { UserProvider } from './backendFacade';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
