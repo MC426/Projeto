@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import logo from '../../../Images/logo ic.png';
 import './Header.css';
 import { useEffect } from 'react';
-import { useUser } from './../../../UserProvider';
+import { useUser } from '../../../backendFacade';
 
 const Header = ({loading}) => {
     const { userData, getUser, loginUser, registerUser, logoutUser } = useUser();

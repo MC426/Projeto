@@ -12,7 +12,7 @@ const client = axios.create({
 
 const UserContext = createContext();
 
-export const UserProvider = ({children}) => {
+export const BackendFacade = ({children}) => {
     const [userData, setUserData] = useState(null);
 
     const updateUserData = (newData) => {
@@ -103,9 +103,24 @@ export const UserProvider = ({children}) => {
         }
       )
     }
+
+    function createRoomReservation(roomId, startTime, endTime) {
+      console.log('user id: ', userData.user_id)
+      console.log('room id: ', roomId)
+      return client.post(
+        "/api/scheduler/manage-room-reservations",
+        {
+          room_name: roomId,
+          medico: userData.user_id,
+          start_ts: startTime,
+          end_ts: endTime
+        }
+      )
+    }
     
     return (
-        <UserContext.Provider value={{ userData, getUser, loginUser, registerUser, logoutUser, getUserById }}>
+        <UserContext.Provider value={{userData, getUser, loginUser, registerUser, logoutUser,
+        getUserById, createRoomReservation}}>
           {children}
         </UserContext.Provider>
       );

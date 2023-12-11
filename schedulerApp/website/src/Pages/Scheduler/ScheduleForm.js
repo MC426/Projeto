@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
-import { useUser } from './../../UserProvider';
+import { useUser } from '../../backendFacade';
 import axios from 'axios';
 
 axios.defaults.xsrfCookieName = 'csrftoken';

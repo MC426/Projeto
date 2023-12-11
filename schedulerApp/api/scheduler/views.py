@@ -147,8 +147,15 @@ class RoomReservationManageView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
-
-        serializer = RoomReservationSerializer(data=request.data)
+        
+        room = Room.objects.get(name=request.data.get('room_name'))
+        serializer_data = {
+            'room': room.id,
+            'start_ts': request.data.get('start_ts'),
+            'end_ts': request.data.get('end_ts'),
+            'medico': request.data.get('medico'),
+        }
+        serializer = RoomReservationSerializer(data=serializer_data)
         if serializer.is_valid(raise_exception=True):
             
             # check if times are valid
@@ -156,7 +163,8 @@ class RoomReservationManageView(APIView):
                serializer.validated_data.get('start_ts'),
                 serializer.validated_data.get('end_ts')
             )
-
+            data = serializer.validated_data
+            print(data)
             room = serializer.validated_data.get('room')
             room = Room.objects.get(id=room.id)
 
