@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useUser } from './../../../backendFacade';
+import { useUser } from '../../../backendFacade';
 
 const Dashboard = () => {
   const { userData, getUser, logoutUser } = useUser();
