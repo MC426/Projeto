@@ -30,12 +30,23 @@ const ScheduleForm = () => {
   };
 
 
-  const handleChange = (name, value) => {
+  const handleChange = (value) => {
+    // Set start_time to the selected value
+    // Set end_time to the selected value + 1 hour
     setFormData({
       ...formData,
-      [name]: value,
+      ['start_time']: value,
+      ['end_time']: addOneHour(value),
     });
   };
+  
+  // Function to add one hour to a given date
+  const addOneHour = (date) => {
+    const newDate = new Date(date);
+    newDate.setHours(newDate.getHours() + 1);
+    return newDate;
+  };
+
   const dateToString = (date) => {
     return date.toISOString().slice(0, 19).replace('T', ' ');
   };
@@ -71,27 +82,27 @@ const ScheduleForm = () => {
 
   return (
     <div style = {{margin: '2%'}}>
-      <h2><strong>Crie um horario de Agendamento</strong></h2>
+      <h2><strong>Crie uma consulta de 1 hora</strong></h2>
       {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       
       <form onSubmit={handleSubmit}>
         <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
-          <label >Inicio:</label>
+          <label>Dia:</label>
           <Datetime
             dateFormat="YYYY-MM-DD"
-            timeFormat="HH:mm:ss"
-            onChange={(value) => handleChange('start_time', value)}
+            timeFormat={false}
+            onChange={(value) => handleChange(value)}
             value={formData.start_time}
           />
         </div>
         <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
-          <label>Fim:</label>
+          <label>Horário de início:</label>
           <Datetime
-            dateFormat="YYYY-MM-DD"
-            timeFormat="HH:mm:ss"
-            onChange={(value) => handleChange('end_time', value)}
-            value={formData.end_time}
+            dateFormat={false}
+            timeFormat="HH:00"
+            onChange={(value) => handleChange(value)}
+            value={formData.start_time}
           />
         </div>
         <div>
