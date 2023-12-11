@@ -109,8 +109,6 @@ class AppointmentReservation(APIView):
         serializer = AppointmentSerializer(appointment)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
 class RoomManageView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -145,6 +143,35 @@ class RoomManageView(APIView):
     
 class RoomReservationManageView(APIView):
     permission_classes = (permissions.AllowAny,)
+
+    def delete(self, request):
+
+        room_reservation_id = request.query_params.get('id')
+        if not room_reservation_id:
+            raise ValidationError("Room reservation id must be provided.")
+        room_reservation = RoomReservation.objects.get(id=room_reservation_id)
+        room_reservation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get(self, request):
+
+        doctor_id = request.query_params.get('medico')
+        
+        if not doctor_id:
+            raise ValidationError("Doctor id must be provided.")
+        
+        #pegar todos os agendamentos do medico
+        room_reservations = RoomReservation.objects.filter(medico=doctor_id)
+
+        #serializar os agendamentos
+        serializer = RoomReservationSerializer(room_reservations, many=True)
+
+        #para cada agendamento, pegar o nome da sala e horário
+        for room_reservation in serializer.data:
+            room = Room.objects.get(id=room_reservation['room'])
+            room_reservation['room_name'] = room.name
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         
