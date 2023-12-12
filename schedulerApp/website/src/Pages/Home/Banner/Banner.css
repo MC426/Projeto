@@ -11,6 +11,7 @@
   padding-bottom: 15vh;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
   
 .banner h1 {
