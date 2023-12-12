@@ -254,7 +254,7 @@ class RoomReservationTests(TestCase):
     def test_limit_1(self):
             
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,5,0,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,6,0,0,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -271,7 +271,7 @@ class RoomReservationTests(TestCase):
     def test_limit_2(self):
                 
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,10,0,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,11,0,1,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -289,7 +289,7 @@ class RoomReservationTests(TestCase):
 
         #Termina quando a self.reservation começa
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,1,22,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,0,0,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -307,7 +307,7 @@ class RoomReservationTests(TestCase):
 
         #Termina 1 minuto depois da self.reservation começar
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,1,22,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,0,1,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -325,7 +325,7 @@ class RoomReservationTests(TestCase):
 
         #Começa quando a self.reservation termina
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,2,5,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,6,0,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -343,7 +343,7 @@ class RoomReservationTests(TestCase):
 
         #Começa 1 minuto antes da self.reservation terminar
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,2,4,59,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,6,0,0,0,timezone.utc),
             'medico': self.medico.user_id
