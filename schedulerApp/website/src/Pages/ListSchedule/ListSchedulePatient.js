@@ -97,7 +97,7 @@ const ScheduleList = () => {
 
             console.log(user_id);
 
-            listAppointmentPaciente(user_id)
+            listAppointmentsPaciente(user_id)
             .then(response => {
                 setSchedules(response.data);
                 setLoading(false);

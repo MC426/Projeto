@@ -12,7 +12,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 const ScheduleList = () => {
-  const { userData, getUser, getUserById, deleteAppointment, listAppointmentMedico } = useUser();
+  const { userData, getUser, getUserById, deleteAppointment, listAppointmentsMedico } = useUser();
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [closestEventDate, setClosestEventDate] = useState(null);
@@ -103,7 +103,7 @@ const ScheduleList = () => {
 
             console.log(user_id);
 
-            listAppointmentMedico(user_id)
+            listAppointmentsMedico(user_id)
             .then(response => {
                 setSchedules(response.data);
                 setLoading(false);
