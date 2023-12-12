@@ -1,2 +1,4 @@
 mc426/
 schedulerApp/website/node_modules
+schedulerApp/api/db.sqlite3
+schedulerApp/api/venv

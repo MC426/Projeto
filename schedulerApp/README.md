@@ -1,9 +1,9 @@
 
 ## Running backend server
 
-First install all the requeriments in requeriments.txt
+First install all the requirements in requirements.txt
 ```
-pip install -r requeriments.txt
+pip install -r requirements.txt
 ```
 
 

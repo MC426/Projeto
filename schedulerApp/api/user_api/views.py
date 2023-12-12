@@ -23,10 +23,11 @@ class UserRegister(APIView):
 
 class UserLogin(APIView):
 	permission_classes = (permissions.AllowAny,)
-	authentication_classes = (SessionAuthentication,)
+	#authentication_classes = (SessionAuthentication,) Dava problema quando esse endpoint era chamado pelo front
 	##
 	def post(self, request):
 		data = request.data
+		print(data)
 		assert validate_email(data)
 		assert validate_password(data)
 		email = request.data['email']
@@ -54,7 +55,9 @@ class UserLogin(APIView):
 			response = Response()
 			response.set_cookie(key='jwt', value=token, httponly=True)
 			response.data = {
-				'jwt': token
+				'jwt': token,
+				'is_doctor': user.is_doctor,
+				'user_id': user.user_id
 			}
 			return response
 
@@ -87,5 +90,13 @@ class UserView(APIView):
 			raise AuthenticationFailed('Unauthenticated!')
 
 		user = AppUser.objects.filter(user_id = payload['user_id']).first()
+		serializer = UserSerializer(user)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+	
+class UserId(APIView):
+	permission_classes = (permissions.AllowAny,)
+	def get(self, request):
+		user_idt = request.query_params['id']
+		user = AppUser.objects.filter(user_id = user_idt).first()
 		serializer = UserSerializer(user)
 		return Response(serializer.data, status=status.HTTP_200_OK)

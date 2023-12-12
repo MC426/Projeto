@@ -1,14 +1,16 @@
+
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import logo from '../../../Images/logo ic.png';
+import logo from '../../../Images/logo-without-copyrights.jpg';
 import './Header.css';
 import { useEffect } from 'react';
-import { useUser } from './../../../UserProvider';
+import { useUser } from '../../../backendFacade';
 
 const Header = ({loading}) => {
-  const { userData, getUser } = useUser();
-  useEffect(() => {
+    const { userData, getUser, loginUser, registerUser, logoutUser } = useUser();
+
+    useEffect(() => {
     console.log("header tenta dar get user");
   }, [userData, loading]);
 
@@ -16,19 +18,34 @@ const Header = ({loading}) => {
         <div className="head-bg">
             <Navbar className="navbar" collapseOnSelect expand="lg">
                 <Container className="container-head">
-                    <Navbar.Brand href="/home"><img src={logo} alt="logo" /></Navbar.Brand>
+                <Navbar.Brand href="/home"><img src={logo} alt="logo" className="logo-image" /></Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" expand="lg"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto align-items-center">
-                            <Link to="/home" className='list-item text-decoration-none'>Home</Link>
-                            <Link to="/about" className='list-item text-decoration-none'>Sobre</Link>
-                            <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher um horario</Link>
-                            <Link to="/listar-agenda" className='list-item text-decoration-none'>Mostrar agenda</Link>
-                            <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
+
+                            <Link to="/" className='list-item text-decoration-none'>Home</Link>
+                        
+                            {
+                            userData && userData.is_doctor ?
+                            <> 
+                                
+                                <Link to="/listar-agenda-medico" className='list-item text-decoration-none'>Agenda Médica</Link>
+                                <Link to="/agenda" className='list-item text-decoration-none'>Criar agenda</Link>
+                                <Link to="/reserva-salas" className='list-item text-decoration-none'>Reserva de salas</Link>
+                            </>
+                            : userData && !userData.is_doctor ?
+                            <> 
+                                <Link to="/escolher-horario" className='list-item text-decoration-none'>Escolher Consulta</Link>
+                                <Link to="/listar-agenda-paciente" className='list-item text-decoration-none'>Agenda Paciente</Link>
+                            
+                            </>
+                            :
+                            <></>
+                            }
                             {
                             userData
                             ?
-                            <Link to="/profile" type="button" className="btn btn-danger">Profile</Link>
+                            <Link to="/profile" type="button" className="btn btn-danger">Perfil</Link>
                             :
                             <Link to="/login" type="button" className="btn btn-danger">Login</Link>
                             }

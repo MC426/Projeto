@@ -12,7 +12,7 @@ const client = axios.create({
 
 const UserContext = createContext();
 
-export const UserProvider = ({children}) => {
+export const BackendFacade = ({children}) => {
     const [userData, setUserData] = useState(null);
 
     const updateUserData = (newData) => {
@@ -47,7 +47,7 @@ export const UserProvider = ({children}) => {
           console.log(res.status);
           console.log("cheguei aqui: ", res.data);
             if (res.status == 200) {
-                console.log("conseguiu logar", res.data);
+                console.log("conseguiu logar", res.data.is_doctor);
                 updateUserData(res.data);
             }
         })
@@ -94,9 +94,91 @@ export const UserProvider = ({children}) => {
             });
         });
     }
+
+    function getUserById(id) {
+      return client.get(
+        "/api/user-id",
+        {
+          params: {id: id}
+        }
+      )
+    }
+
+    function createRoomReservation(roomId, startTime, endTime) {
+      return client.post(
+        "/api/scheduler/manage-room-reservations",
+        {
+          room_name: roomId,
+          medico: userData.user_id,
+          start_ts: startTime,
+          end_ts: endTime
+        }
+      )
+    }
+
+    function getRoomReservations(medicoId) {
+      return client.get(
+        "/api/scheduler/manage-room-reservations",
+        {
+          params: {medico: medicoId}
+        }
+      )  
+    }
+
+    function deleteReservation(id) {
+      return client.delete(
+        "/api/scheduler/manage-room-reservations",
+        {
+          params: {id: id}
+        }
+      )
+    }
+
+    function getRooms() {
+      return client.get(
+        "/api/scheduler/manage-rooms"
+      )
+    }
+
+    function createAppointment({start_ts, end_ts, medico}) {
+      return client.post(
+        "/api/scheduler/create-appointment",
+        {start_ts, end_ts, medico},
+        {withCredentials: true},
+      )
+    }
+
+    function listAppointments(startDate, endDate) {
+      return  client.get("/api/scheduler/list-in-period", { withCredentials: true,
+        params: { start_ts: startDate, end_ts: endDate }
+      })
+    }
     
+    function reserveAppointment(ap_id, pc_id) {
+      return client.get("/api/scheduler/reserve-appointment", { withCredentials: true, params: { appointment_id: ap_id , paciente_id: pc_id }})
+    }
+    
+    function deleteAppointment(ap_id) {
+      return client.get("/api/scheduler/cancel-medico", { withCredentials: true, params: { appointment_id: ap_id }})
+    }
+
+    function listAppointmentsMedico(md_id) {
+      return client.get("/api/scheduler/list", { withCredentials: true, params: { medico_id: md_id }})
+    }
+
+    function cancelAppointment(ap_id) {
+      return client.get("/api/scheduler/cancel-patient", { withCredentials: true, params: { appointment_id: ap_id }})
+    }
+
+    function listAppointmentsPaciente(pc_id) {
+      return client.get("/api/scheduler/list", { withCredentials: true, params: { paciente_id: pc_id }})
+    }
+
     return (
-        <UserContext.Provider value={{ userData, getUser, loginUser, registerUser, logoutUser }}>
+        <UserContext.Provider value={{userData, getUser, loginUser, registerUser, logoutUser,
+        getUserById, createRoomReservation, getRoomReservations, deleteReservation, getRooms,
+        deleteReservation, createAppointment, listAppointments, reserveAppointment, deleteAppointment, 
+        listAppointmentsMedico, cancelAppointment, listAppointmentsPaciente}}>
           {children}
         </UserContext.Provider>
       );

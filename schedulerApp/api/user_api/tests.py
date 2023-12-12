@@ -55,7 +55,7 @@ class UserViewsTests(TestCase):
             'password': 'wrongpass'
         }
         response_login = self.client.post(self.login_url, data, format='json')
-        self.assertEqual(response_login.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response_login.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_register_repeated_email(self):
         data = {'email': 'test2@example.com','password': 'testpass','username': 'usuario'}

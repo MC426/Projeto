@@ -9,8 +9,7 @@ from .models import Appointment, Room, RoomReservation
 from user_api.models import AppUser
 from .serializers import AppointmentSerializer
 from user_api.models import AppUser
-from .validations import ScheduleValidator
-from .validations import ScheduleValidator
+from .validations import ScheduleValidator, PasswordValidator
 from rest_framework.exceptions import ValidationError
 from datetime import datetime, timedelta, timezone
 
@@ -255,7 +254,7 @@ class RoomReservationTests(TestCase):
     def test_limit_1(self):
             
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,5,0,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,6,0,0,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -272,7 +271,7 @@ class RoomReservationTests(TestCase):
     def test_limit_2(self):
                 
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,10,0,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,11,0,1,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -290,7 +289,7 @@ class RoomReservationTests(TestCase):
 
         #Termina quando a self.reservation começa
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,1,22,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,0,0,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -308,7 +307,7 @@ class RoomReservationTests(TestCase):
 
         #Termina 1 minuto depois da self.reservation começar
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,1,22,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,0,1,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -326,7 +325,7 @@ class RoomReservationTests(TestCase):
 
         #Começa quando a self.reservation termina
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,2,5,0,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,6,0,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -344,7 +343,7 @@ class RoomReservationTests(TestCase):
 
         #Começa 1 minuto antes da self.reservation terminar
         data = {
-            'room': self.room.id,
+            'room_name': self.room.name,
             'start_ts': datetime(2028,1,2,4,59,0,0,timezone.utc),
             'end_ts': datetime(2028,1,2,6,0,0,0,timezone.utc),
             'medico': self.medico.user_id
@@ -362,3 +361,35 @@ class RoomReservationTests(TestCase):
         self.reservation.delete()
         self.medico.delete()
         self.room.delete()
+
+class PasswordTest(TestCase):
+    def setUp(self):
+        self.validator = PasswordValidator()
+    '''
+        Testes de acordo com classe de equivalência:
+        As classes invalidas sao:
+        1. nao tem letra maiuscula
+        2. < 8 caracteres
+        3. nao tem numero
+        As classes validas sao:
+        1. Tem letra maiuscula and >= 8 caracteres and tem numero
+    '''
+    # 1. nao tem letra maiuscula
+    def test_no_upper(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('naimshaikhzadeh12')
+    
+    # 2. < 8 caracteres
+    def test_small(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('Bruno00') 
+    
+    # 3. nao tem numero
+    def test_no_number(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('LuizHenriqueYujiDelgadoOda')
+    
+    # 4. Tem letra maiuscula and >= 8 caracteres and tem numero
+    def test_valid(self):
+        self.validator.validate('AndreasCisiRamos2003')
+    

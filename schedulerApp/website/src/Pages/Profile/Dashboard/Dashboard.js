@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useUser } from './../../../UserProvider';
+import { useUser } from '../../../backendFacade';
+import '../../Middle.css'
+
 
 const Dashboard = () => {
   const { userData, getUser, logoutUser } = useUser();
@@ -18,7 +20,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
+    <div className = 'middle' >
           {userData ?
     (<>
     <div className="container mt-5">
@@ -27,7 +29,7 @@ const Dashboard = () => {
         <div className="col-md-4">
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title"> Usuario: {userData.username} </h5>
+              <h5 className="card-title"> Usuário: {userData.username} </h5>
               <p className="card-text"> Email: {userData.email} </p>
             </div>
           </div>
@@ -45,14 +47,14 @@ const Dashboard = () => {
           </div>
 
           {/* Sample Action Buttons */}
-          <div className="mt-3">
+          <div className="mt-3" style = {{margin : '2vh'}}>
             <button className="btn btn-primary">Editar Perfil</button>
             <Link to="/home" type="button" className="btn btn-danger" onClick={submitLogout}>Logout</Link>
           </div>
         </div>
       </div>
     </div></>)
-    : (<div> <h1>Por favor faça login primeiro</h1> 
+    : (<div style = {{textAlign : 'center'}}> <h1>Por favor faça login primeiro</h1> 
     </div>)}
     </div>
   );

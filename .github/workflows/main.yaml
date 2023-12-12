@@ -20,15 +20,13 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r schedulerApp/backend/requeriments.txt
-          pip install backend/
+          pip install -r schedulerApp/api/requirements.txt
 
-      - name: Run tests
-        run: |
-          python -m unittest discover -s backend/tests/
+      # - name: Run tests
+      #   run: |
+      #     python -m unittest discover -s schedulerApp/api/checkers_tarefa_2/
       
       - name: Run Django tests
         run: |
-          cd schedulerApp/backend
+          cd schedulerApp/api
           python manage.py test

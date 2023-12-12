@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
-import { useUser } from './../../UserProvider';
+import { useUser } from '../../backendFacade';
 import axios from 'axios';
+import '../Middle.css'
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
 const ScheduleForm = () => {
-  const { userData, getUser } = useUser();
+  const { userData, getUser, createAppointment } = useUser();
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [formData, setFormData] = useState({
@@ -30,12 +27,23 @@ const ScheduleForm = () => {
   };
 
 
-  const handleChange = (name, value) => {
+  const handleChange = (value) => {
+    // Set start_time to the selected value
+    // Set end_time to the selected value + 1 hour
     setFormData({
       ...formData,
-      [name]: value,
+      ['start_time']: value,
+      ['end_time']: addOneHour(value),
     });
   };
+  
+  // Function to add one hour to a given date
+  const addOneHour = (date) => {
+    const newDate = new Date(date);
+    newDate.setHours(newDate.getHours() + 1);
+    return newDate;
+  };
+
   const dateToString = (date) => {
     return date.toISOString().slice(0, 19).replace('T', ' ');
   };
@@ -52,11 +60,7 @@ const ScheduleForm = () => {
     };
     console.log(requestData);
 
-    client.post(
-      "/api/scheduler/create",
-      requestData,
-      {withCredentials: true},
-    ).then(function(res) {
+    createAppointment(requestData).then(function(res) {
       console.log(res.data);
       setSuccessMessage("Horario criado com sucesso!");
       setErrorMessage(null);
@@ -70,28 +74,28 @@ const ScheduleForm = () => {
   };
 
   return (
-    <div>
-      <h2>Crie um horario de Agendamento</h2>
+    <div className = 'middle' style = {{margin: '2%'}}>
+      <h2><strong>Crie uma consulta de 1 hora</strong></h2>
       {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Inicio:</label>
+        <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
+          <label>Dia:</label>
           <Datetime
             dateFormat="YYYY-MM-DD"
-            timeFormat="HH:mm:ss"
-            onChange={(value) => handleChange('start_time', value)}
+            timeFormat={false}
+            onChange={(value) => handleChange(value)}
             value={formData.start_time}
           />
         </div>
-        <div>
-          <label>Fim:</label>
+        <div style={{marginTop: '1vh', marginBottom: '1vh'}} >
+          <label>Horário de início:</label>
           <Datetime
-            dateFormat="YYYY-MM-DD"
-            timeFormat="HH:mm:ss"
-            onChange={(value) => handleChange('end_time', value)}
-            value={formData.end_time}
+            dateFormat={false}
+            timeFormat="HH:00"
+            onChange={(value) => handleChange(value)}
+            value={formData.start_time}
           />
         </div>
         <div>

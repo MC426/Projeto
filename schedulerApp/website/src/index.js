@@ -4,14 +4,14 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { UserProvider } from './UserProvider';
+import { BackendFacade } from './backendFacade';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <UserProvider>
+    <BackendFacade>
       <App />
-    </UserProvider>
+    </BackendFacade>
   </React.StrictMode>
 );
 
