@@ -18,6 +18,7 @@ const ListAvailableTimes = () => {
   const [appointments, setAppointments] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+
   const formatDate = (dateString) => {
     const options = {
         day: 'numeric',

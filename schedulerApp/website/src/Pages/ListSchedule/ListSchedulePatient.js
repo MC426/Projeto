@@ -16,6 +16,7 @@ const ScheduleList = () => {
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [closestEventDate, setClosestEventDate] = useState(null);
+  const [cancelConsulta, setConsulta] = useState(true);
 
   var user_id = null;
 
@@ -68,6 +69,7 @@ const ScheduleList = () => {
           // todo: realmente fazer uma chamada para o backend para criar o agendamento
           onClick: () => cancelAppointment(appointment.id).then(response =>{
             console.log("Foi possível cancelar consulta: ", response.data);
+            setConsulta(true);
           }).catch(error => {
             console.error("Error cancelling appointment:", error);
           })
@@ -90,7 +92,8 @@ const ScheduleList = () => {
      fetchSchedules(user_id);  
     };
     fetchData();
-  }, []);
+    setConsulta(false);
+  }, [cancelConsulta]);
 
   const fetchSchedules = (user_id) => {
         if(user_id){
