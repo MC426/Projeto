@@ -10,17 +10,14 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
 // todo: realmente fazer uma chamada para o backend para criar o agendamento
 const ListAvailableTimes = () => {
-  const { userData, getUser, getUserById } = useUser();
+  const { userData, getUser, getUserById, listAppointments, reserveAppointment } = useUser();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [appointments, setAppointments] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
 
   const formatDate = (dateString) => {
     const options = {
@@ -50,9 +47,7 @@ const ListAvailableTimes = () => {
     const fetchAppointments = async () => {
         try {
           const response = await 
-          client.get("/api/scheduler/list-in-period", { withCredentials: true,
-              params: { start_ts: startDate, end_ts: newEndDate }
-          }).then(response => {
+          listAppointments(startDate, newEndDate).then(response => {
               setAppointments(response.data);
               console.log("Consegui os dados: ", response.data);
           })
@@ -90,8 +85,7 @@ const ListAvailableTimes = () => {
         {
           label: 'Confirmar agendamento',
           // todo: realmente fazer uma chamada para o backend para criar o agendamento
-          onClick: () => client.get("/api/scheduler/reserve-appointment", { withCredentials: true, params: { appointment_id: appointment.id , paciente_id: user_id }}
-          ).then(response =>{
+          onClick: () => reserveAppointment(appointment.id, user_id).then(response =>{
             console.log("Foi possível reservar horário: ", response.data);
           }).catch(error => {
             console.error("Error reserving appointment:", error);

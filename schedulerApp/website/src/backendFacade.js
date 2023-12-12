@@ -140,10 +140,45 @@ export const BackendFacade = ({children}) => {
       )
     }
 
+    function createAppointment({start_ts, end_ts, medico}) {
+      return client.post(
+        "/api/scheduler/create-appointment",
+        {start_ts, end_ts, medico},
+        {withCredentials: true},
+      )
+    }
+
+    function listAppointments(startDate, endDate) {
+      return  client.get("/api/scheduler/list-in-period", { withCredentials: true,
+        params: { start_ts: startDate, end_ts: endDate }
+      })
+    }
+    
+    function reserveAppointment(ap_id, pc_id) {
+      return client.get("/api/scheduler/reserve-appointment", { withCredentials: true, params: { appointment_id: ap_id , paciente_id: pc_id }})
+    }
+    
+    function deleteAppointment(ap_id) {
+      return client.get("/api/scheduler/cancel-medico", { withCredentials: true, params: { appointment_id: ap_id }})
+    }
+
+    function listAppointmentsMedico(md_id) {
+      return client.get("/api/scheduler/list", { withCredentials: true, params: { medico_id: md_id }})
+    }
+
+    function cancelAppointment(ap_id) {
+      return client.get("/api/scheduler/cancel-patient", { withCredentials: true, params: { appointment_id: ap_id }})
+    }
+
+    function listAppointmentsPaciente(pc_id) {
+      return client.get("/api/scheduler/list", { withCredentials: true, params: { paciente_id: pc_id }})
+    }
+
     return (
         <UserContext.Provider value={{userData, getUser, loginUser, registerUser, logoutUser,
         getUserById, createRoomReservation, getRoomReservations, deleteReservation, getRooms,
-        deleteReservation}}>
+        deleteReservation, createAppointment, listAppointments, reserveAppointment, deleteAppointment, 
+        listAppointmentsMedico, cancelAppointment, listAppointmentsPaciente}}>
           {children}
         </UserContext.Provider>
       );
