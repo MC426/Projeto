@@ -9,12 +9,8 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
 const ScheduleForm = () => {
-  const { userData, getUser } = useUser();
+  const { userData, getUser, createAppointment } = useUser();
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [formData, setFormData] = useState({
@@ -64,11 +60,7 @@ const ScheduleForm = () => {
     };
     console.log(requestData);
 
-    client.post(
-      "/api/scheduler/create-appointment",
-      requestData,
-      {withCredentials: true},
-    ).then(function(res) {
+    createAppointment(requestData).then(function(res) {
       console.log(res.data);
       setSuccessMessage("Horario criado com sucesso!");
       setErrorMessage(null);

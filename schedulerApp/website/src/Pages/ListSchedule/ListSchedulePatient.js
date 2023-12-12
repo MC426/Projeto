@@ -11,12 +11,8 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://localhost:8000"
-});
-
 const ScheduleList = () => {
-  const { userData, getUser, getUserById } = useUser();
+  const { userData, getUser, getUserById, cancelAppointment, listAppointmentsPaciente } = useUser();
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [closestEventDate, setClosestEventDate] = useState(null);
@@ -70,8 +66,7 @@ const ScheduleList = () => {
         {
           label: 'Cancelar agendamento',
           // todo: realmente fazer uma chamada para o backend para criar o agendamento
-          onClick: () => client.get("/api/scheduler/cancel-patient", { withCredentials: true, params: { appointment_id: appointment.id }}
-          ).then(response =>{
+          onClick: () => cancelAppointment(appointment.id).then(response =>{
             console.log("Foi possível cancelar consulta: ", response.data);
           }).catch(error => {
             console.error("Error cancelling appointment:", error);
@@ -102,9 +97,7 @@ const ScheduleList = () => {
 
             console.log(user_id);
 
-            client.get("/api/scheduler/list", { withCredentials: true,
-                params: { paciente_id: user_id }
-            })
+            listAppointmentPaciente(user_id)
             .then(response => {
                 setSchedules(response.data);
                 setLoading(false);
