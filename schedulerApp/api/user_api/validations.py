@@ -35,3 +35,26 @@ def validate_password(data):
     if not password:
         raise ValidationError('a password is needed')
     return True
+
+class EmailValidator:
+    def validate(self, email):
+
+        if '@' not in email:
+            raise ValidationError('Email must contain "@"')
+                
+        username, domain = email.split('@', 1)
+
+        if '.' not in domain :
+            raise ValidationError('Invalid email domain')
+        
+        before_dot, after_dot = domain.split('.',1)
+        
+        if not username or not domain:
+            raise ValidationError('Invalid email format. It not contains a username or a domain')
+        
+        
+        if not before_dot or not after_dot:
+             raise ValidationError('Invalid email format. It not contains a username or a domain')
+        
+        
+        return True
