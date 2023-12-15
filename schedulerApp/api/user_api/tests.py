@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from .models import AppUser
 from django.core.exceptions import ValidationError
+from .validations import UsernameValidator
 
 class UserViewsTests(TestCase):
     def setUp(self):
@@ -83,3 +84,36 @@ class UserViewsTests(TestCase):
         data = {'email': 'email3@example.com', 'username': 'usuario3'}
         with self.assertRaises(KeyError):
             self.client.post(self.register_url, data, format='json')
+
+class UsernameTest(TestCase):
+    def setUp(self):
+        self.validator = UsernameValidator()
+    '''
+        Testes de acordo com classe de equivalência:
+        As classes inválidas são:
+        1. possui caracteres especiais ou números
+        2. possui algum nome que não começa com letra maiúscula
+        3. possui alguma letra maiúscula dentro de um nome
+        As classes válidas são:
+        1. Possui apenas letras no username, todo nome começa com 
+        uma letra maiúscula e o resto é minúscula
+    '''
+    # 1. possui caracteres especiais ou números
+    def test_no_special_number(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('André Luiz3$')
+    
+    # 2. possui algum nome que não começa com letra maiúscula
+    def test_upper_case(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('Abel ferreira') 
+    
+    # 3. possui alguma letra maiúscula dentro de um nome
+    def test_upper_case_middle(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('BrunO')
+    
+    # 4. Possui apenas letras no username, todo nome começa com uma letra maiúscula e o resto é minúscula
+    def test_valid(self):
+        self.validator.validate('Bruno Teixeira César')
+    
