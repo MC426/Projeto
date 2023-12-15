@@ -103,27 +103,29 @@ class EmailTest(TestCase):
             and string depois do '.' > 0
     '''
     # 1. Não tem '@'
-    def test_no_upper(self):
+    def test_no_commercial_at(self):
         with self.assertRaises(ValidationError):
             self.validator.validate('naimgmail.com')
     
     # 2. Não tem '.' no domínio
-    def test_small(self):
+    def test_no_dot(self):
         with self.assertRaises(ValidationError):
             self.validator.validate('Brun@gmailcom') 
     
     # 3. A string antes do '@' não pode ser vazia
-    def test_no_number(self):
+    def test_empty_string_before_commercial_at(self):
         with self.assertRaises(ValidationError):
             self.validator.validate('@hotmail.com')
     
     # 4. A string entre o '@' e o '.' não pode ser vazia
-    def test_valid(self):
-        self.validator.validate('Andreas@.com')
+    def test_empty_string_between_commercial_at_and_dot(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('Andreas@.com')
 
     # 5. A string depois do '.' não pode ser vazia
-    def test_valid(self):
-        self.validator.validate('Bernardo@gmail.')
+    def test_empty_string_after_dot(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('Bernardo@gmail.')
     
     # 6. Tem '@' and Tem '.' and string antes do '@' > 0 and string entre '@' e '.' >0  and string depois do '.' > 0
     def test_valid(self):
