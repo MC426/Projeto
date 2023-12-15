@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from .models import AppUser
 from django.core.exceptions import ValidationError
+from .validations import EmailValidator
 
 class UserViewsTests(TestCase):
     def setUp(self):
@@ -83,3 +84,49 @@ class UserViewsTests(TestCase):
         data = {'email': 'email3@example.com', 'username': 'usuario3'}
         with self.assertRaises(KeyError):
             self.client.post(self.register_url, data, format='json')
+
+    
+class EmailTest(TestCase):
+    def setUp(self):
+        self.validator = EmailValidator()
+    '''
+        Testes de acordo com classe de equivalência:
+        As classes invalidas sao:
+        1. Não tem '@'
+        2. Não tem '.' no domínio
+        3. A string antes do '@' não pode ser vazia
+        4. A string entre o '@' e o '.' não pode ser vazia
+        5. A string depois do '.' não pode ser vazia
+
+        As classes validas sao:
+        1. Tem '@' and Tem '.' and string antes do '@' > 0 and string entre '@' e '.' >0 
+            and string depois do '.' > 0
+    '''
+    # 1. Não tem '@'
+    def test_no_upper(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('naimgmail.com')
+    
+    # 2. Não tem '.' no domínio
+    def test_small(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('Brun@gmailcom') 
+    
+    # 3. A string antes do '@' não pode ser vazia
+    def test_no_number(self):
+        with self.assertRaises(ValidationError):
+            self.validator.validate('@hotmail.com')
+    
+    # 4. A string entre o '@' e o '.' não pode ser vazia
+    def test_valid(self):
+        self.validator.validate('Andreas@.com')
+
+    # 5. A string depois do '.' não pode ser vazia
+    def test_valid(self):
+        self.validator.validate('Bernardo@gmail.')
+    
+    # 6. Tem '@' and Tem '.' and string antes do '@' > 0 and string entre '@' e '.' >0  and string depois do '.' > 0
+    def test_valid(self):
+        self.validator.validate('LuizOda@unicamp.com.br')
+    
+        
