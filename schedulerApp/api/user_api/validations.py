@@ -36,6 +36,7 @@ def validate_password(data):
         raise ValidationError('a password is needed')
     return True
 
+
 class EmailValidator:
     def validate(self, email):
 
@@ -58,3 +59,15 @@ class EmailValidator:
         
         
         return True
+
+class UsernameValidator:
+    def validate(self, username) :
+        if not all(char.isalpha() or char == ' ' for char in username):
+            raise ValidationError('Username cannot have special symbols and numbers')
+        words = username.split(' ')
+        for name in words:
+            if not name[0].isupper():
+                raise ValidationError('Username cannot contain names that do not start with uppercase letters')
+            if not name[1:].islower():
+                raise ValidationError('Username cannot contain uppercase letters inside a name')
+
