@@ -36,6 +36,30 @@ def validate_password(data):
         raise ValidationError('a password is needed')
     return True
 
+
+class EmailValidator:
+    def validate(self, email):
+
+        if '@' not in email:
+            raise ValidationError('Email must contain "@"')
+                
+        username, domain = email.split('@', 1)
+
+        if '.' not in domain :
+            raise ValidationError('Invalid email domain')
+        
+        before_dot, after_dot = domain.split('.',1)
+        
+        if not username or not domain:
+            raise ValidationError('Invalid email format. It not contains a username or a domain')
+        
+        
+        if not before_dot or not after_dot:
+             raise ValidationError('Invalid email format. It not contains a username or a domain')
+        
+        
+        return True
+
 class UsernameValidator:
     def validate(self, username) :
         if not all(char.isalpha() or char == ' ' for char in username):
@@ -46,3 +70,4 @@ class UsernameValidator:
                 raise ValidationError('Username cannot contain names that do not start with uppercase letters')
             if not name[1:].islower():
                 raise ValidationError('Username cannot contain uppercase letters inside a name')
+
